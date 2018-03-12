@@ -14,8 +14,6 @@ operationsRouter.route('/')
 .all(Verify.verifyApiUser) //this will decode the req
 .get(function (req, res, next) {
     
-    //Let's try to find the timesheet
-    
     console.log("Operation permitted for API user");
         
     res.writeHead(200, {'Context-Type': 'text-plain'});

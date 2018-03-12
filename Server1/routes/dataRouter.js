@@ -40,8 +40,8 @@ dataRouter.route('/')
 })
 
 dataRouter.route('/:dataId')
-.all(Verify.verifyOrdinaryUser) //this will decode the req
-.get(function (req, res, next) {
+//.all(Verify.verifyApiUser, Verify.verifyOrdinaryUser) //this will decode the req
+.get(Verify.verifyApiGw, Verify.verifyOrdinaryUser, function (req, res, next) {
     Data.find({'_id': req.params.dataId}) // return template for the appropriate user
         .exec(function (err, data) {
           if (err) throw err;
@@ -49,7 +49,7 @@ dataRouter.route('/:dataId')
     });
    
 })
-.put(function (req, res, next) {
+.put(Verify.verifyApiGw, Verify.verifyOrdinaryUser, function (req, res, next) {
     Data.update({'ownedBy': req.decoded._id, '_id': req.params.dataId}, {
             $set: req.body
             }, {
@@ -59,7 +59,7 @@ dataRouter.route('/:dataId')
                 res.json(data);
             });
 })
-.delete(function(req, res, next) {
+.delete(Verify.verifyApiGw, Verify.verifyOrdinaryUser, function(req, res, next) {
     Data.remove({ownedBy: req.decoded._id, '_id': req.params.dataId}, function (err, resp) {
         if (err) next(err);
         res.json(resp);
