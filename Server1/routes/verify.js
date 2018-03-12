@@ -30,7 +30,7 @@ exports.verifyOrdinaryUser = function (req, res, next) {
     } else {
 
         if (req.decoded){
-            console.log("ALready authenticated as API user: " + req.decoded.application);
+            console.log("Already authenticated as API user: " + req.decoded.application);
             req.decoded._id = req.decoded.ownedBy; // needed for the same behavior for accesss token and APi key
             next();
         } else {

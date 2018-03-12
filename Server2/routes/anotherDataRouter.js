@@ -10,8 +10,8 @@ var anotherDataRouter = express.Router();
 anotherDataRouter.use(bodyParser.json());
 
 anotherDataRouter.route('/')
-.all(Verify.verifyOrdinaryUser) //this will decode the req
-.get(function (req, res, next) {
+//.all(Verify.verifyOrdinaryUser) //this will decode the req
+.get(Verify.verifyApiGw, Verify.verifyOrdinaryUser, function (req, res, next) {
     
     //Let's try to find the timesheet
     Data.find({'ownedBy': req.decoded._id}, function (err, data) {
@@ -22,7 +22,7 @@ anotherDataRouter.route('/')
 
     })
 })
-.post(function (req, res, next) {
+.post(Verify.verifyApiGw, Verify.verifyOrdinaryUser, function (req, res, next) {
     var userId = req.decoded._id;
     var newData = req.body;
     newData.ownedBy = userId;
@@ -40,8 +40,8 @@ anotherDataRouter.route('/')
 })
 
 anotherDataRouter.route('/:dataId')
-.all(Verify.verifyOrdinaryUser) //this will decode the req
-.get(function (req, res, next) {
+//.all(Verify.verifyOrdinaryUser) //this will decode the req
+.get(Verify.verifyApiGw, Verify.verifyOrdinaryUser, function (req, res, next) {
     Data.find({'_id': req.params.dataId}) // return template for the appropriate user
         .exec(function (err, data) {
           if (err) throw err;
@@ -49,7 +49,7 @@ anotherDataRouter.route('/:dataId')
     });
    
 })
-.put(function (req, res, next) {
+.put(Verify.verifyApiGw, Verify.verifyOrdinaryUser, function (req, res, next) {
     Data.update({'ownedBy': req.decoded._id, '_id': req.params.dataId}, {
             $set: req.body
             }, {
@@ -59,7 +59,7 @@ anotherDataRouter.route('/:dataId')
                 res.json(data);
             });
 })
-.delete(function(req, res, next) {
+.delete(Verify.verifyApiGw, Verify.verifyOrdinaryUser, function(req, res, next) {
     Data.remove({ownedBy: req.decoded._id, '_id': req.params.dataId}, function (err, resp) {
         if (err) next(err);
         res.json(resp);

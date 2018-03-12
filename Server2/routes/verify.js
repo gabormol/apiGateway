@@ -28,11 +28,45 @@ exports.verifyOrdinaryUser = function (req, res, next) {
             }
         });
     } else {
-        // if there is no token
-        // return an error
-        var err = new Error('No token provided!');
-        err.status = 403;
-        return next(err);
+
+        if (req.decoded){
+            console.log("ALready authenticated as API user: " + req.decoded.application);
+            req.decoded._id = req.decoded.ownedBy; // needed for the same behavior for accesss token and APi key
+            next();
+        } else {
+            // if there is no token
+            // return an error
+            var err = new Error('No token provided!');
+            err.status = 403;
+            return next(err);
+        }
+    }
+};
+
+exports.verifyApiGw = function (req, res, next) {
+    // check header or url parameters or post parameters for token
+    var apigwtoken = req.headers['api-gw-identifyer-token'];
+
+    // decode token
+    if (apigwtoken) {
+
+        jwt.verify(apigwtoken, config.secretKey, function (err, decoded) {
+            if (err) {
+                var err = new Error('Invalid API_KEY provided!');
+                err.status = 401;
+                return next(err);
+            } else {
+                console.log(decoded);
+                // if everything is good, save to request for use in other routes
+                req.decoded = decoded;
+                next();
+            }
+        });
+            
+    } else {
+       
+        console.log('No APIGW token found');
+        next();
     }
 };
 
