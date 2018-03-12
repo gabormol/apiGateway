@@ -34,8 +34,10 @@ apikeyuserRouter.route('/')
         console.log('New usage stored!');
         console.log(usage);
 
-        var apiKey = Verify.getToken({"isApiKey": true, "application": appName, "feat1":req.body.feat1,
-         "feat2":req.body.feat2, "feat3":req.body.feat3, "quota":req.body.quota}, true);
+        var tokenDataObject = req.body;
+        tokenDataObject.isApiKey = true;
+
+        var apiKey = Verify.getToken(tokenDataObject, true);
 
         var newApiKey = {
             "application" : appName,
