@@ -31,7 +31,7 @@ apikeyuserRouter.route('/')
     Apikeyuser.create(newApikeyuser, function(err, usage) {
         if (err) throw err;
 
-        console.log('New usage stored!');
+        console.log('New API key user stored!');
         console.log(usage);
 
         var tokenDataObject = req.body;

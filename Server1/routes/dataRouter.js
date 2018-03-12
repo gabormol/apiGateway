@@ -10,8 +10,8 @@ var dataRouter = express.Router();
 dataRouter.use(bodyParser.json());
 
 dataRouter.route('/')
-.all(Verify.verifyOrdinaryUser) //this will decode the req
-.get(function (req, res, next) {
+//.all(Verify.verifyOrdinaryUser) //this will decode the req
+.get(Verify.verifyApiGw, Verify.verifyOrdinaryUser, function (req, res, next) {
     
     //Let's try to find the timesheet
     Data.find({'ownedBy': req.decoded._id}, function (err, data) {
@@ -22,7 +22,7 @@ dataRouter.route('/')
 
     })
 })
-.post(function (req, res, next) {
+.post(Verify.verifyApiGw, Verify.verifyOrdinaryUser, function (req, res, next) {
     var userId = req.decoded._id;
     var newData = req.body;
     newData.ownedBy = userId;
