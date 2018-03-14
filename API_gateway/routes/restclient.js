@@ -2,20 +2,29 @@ var request = require('request');
 
 exports.queryExternalEndpoint = function (opt, res, next) {
 
-    var options = {
-        url: opt.url,
-        headers: opt.headers
-    };
-
-    console.log(options);
+    console.log(opt);
 
     function callback(error, response, body) {
         if (error) next(error);
-        console.log("Found something on remote server...");
         
         res.json(JSON.parse(body));
     }
 
-    request.get(options, callback); // -> for previous function
+    request.get(opt, callback); // -> for previous function
+
+};
+
+exports.createUserData = function (opt, res, next) {
+
+    console.log(opt);
+
+    function callback(error, response, body) {
+        if (error) next(error);
+        
+        res.writeHead(200, {'Context-Type': 'text-plain'});
+        res.end(response.body); // just relay the returned result...
+    }
+
+    request.post(opt, callback); // -> for previous function
 
 };

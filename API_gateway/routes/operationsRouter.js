@@ -24,11 +24,11 @@ operationsRouter.route('/')
     
 })
 
-operationsRouter.route('/getdata/')
+operationsRouter.route('/data/')
 .all(Verify.verifyApiUser) //this will decode the req
 .get(function (req, res, next) {
     
-    console.log("Operation permitted for API user");
+    console.log("GET operation permitted for API user");
 
     var options = {
         url: 'http://localhost:3000/data',
@@ -41,12 +41,48 @@ operationsRouter.route('/getdata/')
     restClient.queryExternalEndpoint(options, res, next)
     
 })
+.post(function (req, res, next) {
+    
+    console.log("POST Operation permitted for API user");
 
-operationsRouter.route('/getanotherdata/')
+    var options = {
+        url: 'http://localhost:3000/data',
+        headers: {
+            'Content-Type': 'application/json',
+            'api-gw-identifyer-token': req.headers['api-key-token']
+        },
+        form: req.body
+    };
+
+    restClient.createUserData(options, res, next)
+    
+})
+
+operationsRouter.route('/data/:dataId')
 .all(Verify.verifyApiUser) //this will decode the req
 .get(function (req, res, next) {
     
-    console.log("Operation permitted for API user");
+    console.log("GET operation permitted for API user");
+    var newUrl = 'http://localhost:3000/data/' + req.params.dataId;
+
+    var options = {
+        url: newUrl,
+        headers: {
+            'Content-Type': 'application/json',
+            'api-gw-identifyer-token': req.headers['api-key-token']
+        }
+    };
+
+    restClient.queryExternalEndpoint(options, res, next)
+    
+})
+
+
+operationsRouter.route('/anotherdata/')
+.all(Verify.verifyApiUser) //this will decode the req
+.get(function (req, res, next) {
+    
+    console.log("GET operation permitted for API user");
         
     var options = {
         url: 'http://localhost:3001/anotherdata',
@@ -58,6 +94,41 @@ operationsRouter.route('/getanotherdata/')
 
     restClient.queryExternalEndpoint(options, res, next)
 
+    
+})
+.post(function (req, res, next) {
+    
+    console.log("POST Operation permitted for API user");
+
+    var options = {
+        url: 'http://localhost:3001/anotherdata',
+        headers: {
+            'Content-Type': 'application/json',
+            'api-gw-identifyer-token': req.headers['api-key-token']
+        },
+        form: req.body
+    };
+
+    restClient.createUserData(options, res, next)
+    
+})
+
+operationsRouter.route('/anotherdata/:dataId')
+.all(Verify.verifyApiUser) //this will decode the req
+.get(function (req, res, next) {
+    
+    console.log("GET operation permitted for API user");
+    var newUrl = 'http://localhost:3001/anotherdata/' + req.params.dataId;
+
+    var options = {
+        url: newUrl,
+        headers: {
+            'Content-Type': 'application/json',
+            'api-gw-identifyer-token': req.headers['api-key-token']
+        }
+    };
+
+    restClient.queryExternalEndpoint(options, res, next)
     
 })
 
