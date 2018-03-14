@@ -1,7 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var request = require('request');
 
 var Apikeyuser = require('../models/apikeyuser');
 var User = require('../models/user');
@@ -10,6 +9,8 @@ var ApiKeyEntry = require('../models/apikeyentry');
 
 var operationsRouter = express.Router();
 operationsRouter.use(bodyParser.json());
+
+var restClient = require('./restclient');
 
 operationsRouter.route('/')
 .all(Verify.verifyApiUser) //this will decode the req
@@ -37,16 +38,7 @@ operationsRouter.route('/getdata/')
         }
     };
 
-    console.log(options);
-
-    function callback(error, response, body) {
-        if (error) next(error);
-        console.log("Found something on remote server...");
-        
-        res.json(JSON.parse(body));
-    }
-
-    request(options, callback);
+    restClient.queryExternalEndpoint(options, res, next)
     
 })
 
@@ -64,16 +56,7 @@ operationsRouter.route('/getanotherdata/')
         }
     };
 
-    console.log(options);
-
-    function callback(error, response, body) {
-        if (error) next(error);
-        console.log("Found something on remote server...");
-        
-        res.json(JSON.parse(body));
-    }
-
-    request(options, callback);
+    restClient.queryExternalEndpoint(options, res, next)
 
     
 })
