@@ -16,6 +16,6 @@ exports.queryExternalEndpoint = function (opt, res, next) {
         res.json(JSON.parse(body));
     }
 
-    request(options, callback); // -> for previous function
+    request.get(options, callback); // -> for previous function
 
 };
