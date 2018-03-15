@@ -28,3 +28,29 @@ exports.createUserData = function (opt, res, next) {
     request.post(opt, callback); // -> for previous function
 
 };
+
+exports.modifyUserData = function (opt, res, next) {
+
+    console.log(opt);
+
+    function callback(error, response, body) {
+        if (error) next(error);
+        res.json(body);
+    }
+
+    request.put(opt, callback); // -> for previous function
+
+};
+
+exports.deleteUserData = function (opt, res, next) {
+
+    console.log(opt);
+
+    function callback(error, response, body) {
+        if (error) next(error);
+        res.json(JSON.parse(body));
+    }
+
+    request.delete(opt, callback); // -> for previous function
+
+};

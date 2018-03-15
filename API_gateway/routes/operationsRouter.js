@@ -76,6 +76,39 @@ operationsRouter.route('/data/:dataId')
     restClient.queryExternalEndpoint(options, res, next)
     
 })
+.put(function (req, res, next) {
+    
+    console.log("PUT operation permitted for API user");
+    var newUrl = 'http://localhost:3000/data/' + req.params.dataId;
+
+    var options = {
+        url: newUrl,
+        headers: {
+            'Content-Type': 'application/json',
+            'api-gw-identifyer-token': req.headers['api-key-token']
+        },
+        json: req.body
+    };
+
+    restClient.modifyUserData(options, res, next)
+    
+})
+.delete(function (req, res, next) {
+    
+    console.log("DELETE operation permitted for API user");
+    var newUrl = 'http://localhost:3000/data/' + req.params.dataId;
+
+    var options = {
+        url: newUrl,
+        headers: {
+            'Content-Type': 'application/json',
+            'api-gw-identifyer-token': req.headers['api-key-token']
+        }
+    };
+
+    restClient.deleteUserData(options, res, next)
+    
+})
 
 
 operationsRouter.route('/anotherdata/')
@@ -129,6 +162,39 @@ operationsRouter.route('/anotherdata/:dataId')
     };
 
     restClient.queryExternalEndpoint(options, res, next)
+    
+})
+.put(function (req, res, next) {
+    
+    console.log("PUT operation permitted for API user");
+    var newUrl = 'http://localhost:3001/anotherdata/' + req.params.dataId;
+
+    var options = {
+        url: newUrl,
+        headers: {
+            'Content-Type': 'application/json',
+            'api-gw-identifyer-token': req.headers['api-key-token']
+        },
+        json: req.body
+    };
+
+    restClient.modifyUserData(options, res, next)
+    
+})
+.delete(function (req, res, next) {
+    
+    console.log("DELETE operation permitted for API user");
+    var newUrl = 'http://localhost:3001/anotherdata/' + req.params.dataId;
+
+    var options = {
+        url: newUrl,
+        headers: {
+            'Content-Type': 'application/json',
+            'api-gw-identifyer-token': req.headers['api-key-token']
+        }
+    };
+
+    restClient.deleteUserData(options, res, next)
     
 })
 
