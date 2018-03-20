@@ -2,25 +2,73 @@
 
 angular.module('apiKeyGenerator')
 
-.controller('ApiKeyDisplayController', ['$scope', 'AuthFactory', function ($scope, AuthFactory) {
+//apikeyactions.html
+.controller('ApiKeyDisplayController', ['$scope', 'AuthFactory', 'ngDialog', function ($scope, AuthFactory, ngDialog) {
     
-    $scope.firstName = '';
+    $scope.username = '';
     
     AuthFactory.myData().query(
         function (response){
-            if(typeof response[0].firstname !== 'undefined' && response[0].firstname.length>0){
-                $scope.firstName = " " + response[0].firstname;
+            if(typeof response[0].username !== 'undefined' && response[0].username.length>0){
+                $scope.username = " " + response[0].username;
             } else {
                 
             }
         },
         function (response){
-            $scope.message = "Get name error: " + response.status + " " + response.statusText;
+            $scope.message = "Get username error: " + response.status + " " + response.statusText;
         }
     );
+
+    $scope.addNewApiKey = function() {
+        
+            ngDialog.open({ template: 'views/addapikey.html', scope: $scope, className: 'ngdialog-theme-default',    controller:"AddApiKeyController" });
+
+    };
     
 }])
 
+//addapikey.html
+.controller('AddApiKeyController', ['$scope', 'apikeyFactory', 'ngDialog', '$state', function ($scope, apikeyFactory, ngDialog, $state) {
+    var newApiKeyRequest = {
+        application : "appName",
+        feat1 : false,
+        feat2 : false,
+        feat3 : false,
+        quota : 10
+    }
+
+    /*$scope.featureOptions = [{
+            value: false,
+            label: "DISABLED"
+        }, {
+            value: true,
+            label: "ENABLED"
+        }
+    ]*/
+
+     $scope.featureOptions = {
+        model: newApiKeyRequest,
+        availableOptions: [
+            {value: 'false', label: 'DISABLED'},
+            {value: 'true', label: 'ENABLED'}
+        ]
+    };
+
+    $scope.selectFeature = function(){
+        console.log($scope.featureOptions.model);
+    }
+
+    $scope.addNewApiKey = function(){
+        console.log($scope.featureOptions.model);
+
+        ngDialog.close();
+    }
+
+
+}])
+
+//home.html
 .controller('HomeController', ['$scope', '$state', '$rootScope', 'ngDialog', '$localStorage', 'AuthFactory', function ($scope, $state, $rootScope, ngDialog, $localStorage, AuthFactory) {
 
     $scope.loggedIn = false;

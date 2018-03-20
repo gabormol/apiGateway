@@ -1,0 +1,45 @@
+<div class="ngdialog-message">
+    <div class="">
+        <h3>Add new expense</h3>
+    </div>
+     
+    <div class="">&nbsp;</div>
+    
+    <div class="">
+        <form name="newApiKeyForm" ng-submit="addNewApiKey()">
+            <div class="form-group">
+                <label for="appname">Application Name</label>
+                <input type="text" class="form-control input-sm" id="appname" ng-model="featureOptions.model.application" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" step="any" class="form-control input-sm" id="description" placeholder="Description" ng-model="newApiKeyRequest.description">
+            </div>   
+            <div class="form-group">
+                <label for="feature1">Feature 1</label>
+                    <select class="form-control" id="feature1" ng-model="featureOptions.model" >
+                        <!--option ng-repeat="option.label for option in featureOptions.availableOptions"> </option-->
+                    </select>
+            </div>
+            <div class="form-group">
+                <label for="feature2">Feature 2</label>
+                    <select class="form-control" id="feature2" value="0" ng-model="featureOptions.model.feat2">
+                        <option value="false">DISABLED</option>
+                        <option value="true">ENABLED</option>
+                    </select>
+            </div>
+            <div class="form-group">
+                <label for="feature3">Feature 3</label>
+                    <select class="form-control" id="feature2" ng-model="featureOptions.model.feat3">
+                        <option ng-repeat="featureOption in featureOptions.availableOptions" value={{featureOption.value}}>{{featureOption.label}}</option>
+                    </select>
+            </div>
+            <div class="form-group">
+                <label for="quota">Quota</label>
+                <input type="number" step="any" class="form-control input-sm" id="quota" ng-model="featureOptions.model.quota" required>
+            </div>                
+            <button type="submit" ng-disabled="newApiKeyForm.$invalid" class="btn btn-info btn-sm">Add</button>
+            <button type="button" class="btn btn-default btn-sm" ng-click=cancelNgDialogue()>Cancel</button>
+        </form>
+    </div>
+</div>

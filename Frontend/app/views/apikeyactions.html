@@ -6,7 +6,47 @@
                </ul>
             </div>
         <div class="col-xs-12">
-            <h1>some API key</h1>
+            <h1>API keys for user {{username}}</h1>
             &nbsp;
         </div>
+
+        <div class="col-xs-12">
+                <!-- <div class="loader" ng-show="!showApiKeys"></div> -->
+                <table >
+                    <tr align="center">
+                        <th width="150">
+                            <h5 align="center">Application name</h5>
+                        </th>
+                        <th width="250">
+                            <h5 align="center">API key</h5>
+                        </th>
+                        <th width="250">
+                            <h5 align="center">API key description</h5>
+                        </th>
+                    </tr>
+                    <tr ng-repeat="apikey in apikeys">
+                        <td  align="center">
+                            <h4><b>{{apikey.application}}</b></h4>
+                        </td>
+                        <td  align="center">
+                            <h4><b>{{apikey.apiKey}}</b></h4>
+                        </td>
+                        <td  align="center">
+                            <h4><b>{{apikey.description}}</b></h4>
+                        </td> 
+                        
+                    </tr>
+                    
+                </table> 
+        </div>
+
+        <div class="col-xs-6">
+                <p style="padding:10px;"></p>
+                 <button id="btnAdd" class="btn btn-sm" ng-click=addNewApiKey()>Add new API key</button>
+        </div>
+        <div class="col-xs-6">
+               
+        </div>
+    </div>
+
         

@@ -154,21 +154,12 @@ angular.module('apiKeyGenerator')
 
 }])
 
-// this is unused code so far...
-.service('dataShareService', function() {
-  var dataList = [];
+.factory('apikeyFactory', ['$resource', 'baseURL', function ($resource, baseURL) {
 
-  var addData = function(newObj) {
-      dataList.push(newObj);
-  };
+        return $resource(baseURL + "apikeyusers", null, {
+            'update': {
+                method: 'PUT'
+            }
+        });
 
-  var getData = function(){
-      return dataList;
-  };
-
-  return {
-    addData: addData,
-    getData: getData
-  };
-
-});
+}])
