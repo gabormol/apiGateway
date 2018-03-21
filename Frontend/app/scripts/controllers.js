@@ -30,41 +30,54 @@ angular.module('apiKeyGenerator')
 
 //addapikey.html
 .controller('AddApiKeyController', ['$scope', 'apikeyFactory', 'ngDialog', '$state', function ($scope, apikeyFactory, ngDialog, $state) {
-    var newApiKeyRequest = {
-        application : "appName",
-        feat1 : false,
-        feat2 : false,
-        feat3 : false,
-        quota : 10
-    }
+    $scope.appName = "your application's name";
+    $scope.quota = 10;
 
-    /*$scope.featureOptions = [{
-            value: false,
-            label: "DISABLED"
-        }, {
-            value: true,
-            label: "ENABLED"
-        }
-    ]*/
-
-     $scope.featureOptions = {
-        model: newApiKeyRequest,
+    $scope.feature1Options = {
+        selectedOption: {value: 'false', label: 'DISABLED'},
         availableOptions: [
             {value: 'false', label: 'DISABLED'},
             {value: 'true', label: 'ENABLED'}
         ]
     };
 
-    $scope.selectFeature = function(){
-        console.log($scope.featureOptions.model);
-    }
+    $scope.feature2Options = {
+        selectedOption: {value: 'false', label: 'DISABLED'},
+        availableOptions: [
+            {value: 'false', label: 'DISABLED'},
+            {value: 'true', label: 'ENABLED'}
+        ]
+    };
+
+    $scope.feature3Options = {
+        selectedOption: {value: 'false', label: 'DISABLED'},
+        availableOptions: [
+            {value: 'false', label: 'DISABLED'},
+            {value: 'true', label: 'ENABLED'}
+        ]
+    };
 
     $scope.addNewApiKey = function(){
-        console.log($scope.featureOptions.model);
+        console.log($scope.feature1Options);
+        console.log($scope.feature2Options);
+        console.log($scope.feature3Options);
+
+        var newApiKeyRequest = {
+            application : $scope.appName,
+            feat1 : $scope.feature1Options.selectedOption.value,
+            feat2 : $scope.feature2Options.selectedOption.value,
+            feat3 : $scope.feature3Options.selectedOption.value,
+            quota : $scope.quota
+        }
+
+        console.log(newApiKeyRequest);
 
         ngDialog.close();
     }
 
+    $scope.cancelNgDialogue = function(){
+        ngDialog.close();
+    }
 
 }])
 

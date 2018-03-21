@@ -9,7 +9,7 @@
         <form name="newApiKeyForm" ng-submit="addNewApiKey()">
             <div class="form-group">
                 <label for="appname">Application Name</label>
-                <input type="text" class="form-control input-sm" id="appname" ng-model="featureOptions.model.application" required>
+                <input type="text" class="form-control input-sm" id="appname" ng-model="appName" required>
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
@@ -17,26 +17,25 @@
             </div>   
             <div class="form-group">
                 <label for="feature1">Feature 1</label>
-                    <select class="form-control" id="feature1" ng-model="featureOptions.model" >
-                        <!--option ng-repeat="option.label for option in featureOptions.availableOptions"> </option-->
+                    <select class="form-control" id="feature1" ng-model="feature1Options.selectedOption" 
+                        ng-options="option.label for option in feature1Options.availableOptions track by option.value">
                     </select>
             </div>
             <div class="form-group">
                 <label for="feature2">Feature 2</label>
-                    <select class="form-control" id="feature2" value="0" ng-model="featureOptions.model.feat2">
-                        <option value="false">DISABLED</option>
-                        <option value="true">ENABLED</option>
+                    <select class="form-control" id="feature2" ng-model="feature2Options.selectedOption" 
+                        ng-options="option.label for option in feature2Options.availableOptions track by option.value">
                     </select>
             </div>
             <div class="form-group">
                 <label for="feature3">Feature 3</label>
-                    <select class="form-control" id="feature2" ng-model="featureOptions.model.feat3">
-                        <option ng-repeat="featureOption in featureOptions.availableOptions" value={{featureOption.value}}>{{featureOption.label}}</option>
+                    <select class="form-control" id="feature3" ng-model="feature3Options.selectedOption" 
+                        ng-options="option.label for option in feature3Options.availableOptions track by option.value">
                     </select>
             </div>
             <div class="form-group">
                 <label for="quota">Quota</label>
-                <input type="number" step="any" class="form-control input-sm" id="quota" ng-model="featureOptions.model.quota" required>
+                <input type="number" step="any" class="form-control input-sm" id="quota" ng-model="quota" required>
             </div>                
             <button type="submit" ng-disabled="newApiKeyForm.$invalid" class="btn btn-info btn-sm">Add</button>
             <button type="button" class="btn btn-default btn-sm" ng-click=cancelNgDialogue()>Cancel</button>
