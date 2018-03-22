@@ -10,11 +10,23 @@ var ApiKeyEntry = require('../models/apikeyentry');
 var apikeyuserRouter = express.Router();
 apikeyuserRouter.use(bodyParser.json());
 
+apikeyuserRouter.route('/apikeys')
+.all(Verify.verifyOrdinaryUser) //this will decode the req
+.get(function (req, res, next) {
+
+    ApiKeyEntry.find({'ownedBy': req.decoded._id}, function (err, apikeys) {
+        if (err) next(err);
+        console.log("Found something...!");
+        
+        res.json(apikeys);
+
+    })
+})
+
 apikeyuserRouter.route('/')
 .all(Verify.verifyOrdinaryUser) //this will decode the req
 .get(function (req, res, next) {
-    
-    //Let's try to find the timesheet
+
     Apikeyuser.find({'ownedBy': req.decoded._id}, function (err, usage) {
         if (err) next(err);
         console.log("Found something...!");
@@ -28,6 +40,7 @@ apikeyuserRouter.route('/')
     var newApikeyuser = req.body;
     newApikeyuser.ownedBy = userId;
     var appName = req.body.application;
+    var description = req.body.description;
     Apikeyuser.create(newApikeyuser, function(err, usage) {
         if (err) throw err;
 
@@ -41,7 +54,9 @@ apikeyuserRouter.route('/')
 
         var newApiKey = {
             "application" : appName,
-            "apiKey" : apiKey
+            "apiKey" : apiKey,
+            "ownedBy" : userId,
+            "description" : description
         }
         ApiKeyEntry.create(newApiKey, function(err, apiKeyEntry) {
 

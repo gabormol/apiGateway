@@ -2,7 +2,7 @@
     <div class="container">
         <div class="col-xs-12">
                <ul class="breadcrumb">
-                   <li class="active">Your API key</li>
+                   <li class="active">API keys</li>
                </ul>
             </div>
         <div class="col-xs-12">
@@ -12,27 +12,33 @@
 
         <div class="col-xs-12">
                 <!-- <div class="loader" ng-show="!showApiKeys"></div> -->
-                <table >
+                <table id="apikeytable">
                     <tr align="center">
                         <th width="150">
-                            <h5 align="center">Application name</h5>
+                            <h5 align="center">App name</h5>
+                            
                         </th>
                         <th width="250">
                             <h5 align="center">API key</h5>
+                           
                         </th>
                         <th width="250">
                             <h5 align="center">API key description</h5>
+                            
                         </th>
                     </tr>
-                    <tr ng-repeat="apikey in apikeys">
+                    <tr ng-repeat="apikey in apiKeys">
                         <td  align="center">
-                            <h4><b>{{apikey.application}}</b></h4>
+                            <h6><b>{{apikey.application}}</b></h6>
+                            
                         </td>
-                        <td  align="center">
-                            <h4><b>{{apikey.apiKey}}</b></h4>
+                        <td  class="apikeycell" align="center">
+                            {{apikey.apiKey}}
+                            
                         </td>
-                        <td  align="center">
-                            <h4><b>{{apikey.description}}</b></h4>
+                        <td  class="apikeydescriptioncell" align="center">
+                            <h5>{{apikey.description}}</h5>
+                            
                         </td> 
                         
                     </tr>

@@ -3,9 +3,14 @@
 angular.module('apiKeyGenerator')
 
 //apikeyactions.html
-.controller('ApiKeyDisplayController', ['$scope', 'AuthFactory', 'ngDialog', function ($scope, AuthFactory, ngDialog) {
+.controller('ApiKeyDisplayController', ['$scope', 'AuthFactory', 'apikeyFactory', 'ngDialog', function ($scope, AuthFactory, apikeyFactory, ngDialog) {
     
     $scope.username = '';
+    $scope.application = '';
+    $scope.apiKey = '';
+    $scope.description = '';
+
+    $scope.apiKeys = [];
     
     AuthFactory.myData().query(
         function (response){
@@ -25,13 +30,25 @@ angular.module('apiKeyGenerator')
             ngDialog.open({ template: 'views/addapikey.html', scope: $scope, className: 'ngdialog-theme-default',    controller:"AddApiKeyController" });
 
     };
+
+    var apiKeys = apikeyFactory.query(
+        function (response){
+            for (var i = 0; i < response.length; i++) {
+                $scope.apiKeys.push(response[i]);
+            } 
+        },
+        function (response){
+            $scope.message = "Get username error: " + response.status + " " + response.statusText;
+        }
+    );
     
 }])
 
 //addapikey.html
-.controller('AddApiKeyController', ['$scope', 'apikeyFactory', 'ngDialog', '$state', function ($scope, apikeyFactory, ngDialog, $state) {
+.controller('AddApiKeyController', ['$scope', 'ngDialog', '$state', 'apikeyUserFactory', function ($scope, ngDialog, $state, apikeyUserFactory) {
     $scope.appName = "your application's name";
     $scope.quota = 10;
+    $scope.description = "some description..."
 
     $scope.feature1Options = {
         selectedOption: {value: 'false', label: 'DISABLED'},
@@ -58,21 +75,28 @@ angular.module('apiKeyGenerator')
     };
 
     $scope.addNewApiKey = function(){
-        console.log($scope.feature1Options);
-        console.log($scope.feature2Options);
-        console.log($scope.feature3Options);
 
         var newApiKeyRequest = {
             application : $scope.appName,
             feat1 : $scope.feature1Options.selectedOption.value,
             feat2 : $scope.feature2Options.selectedOption.value,
             feat3 : $scope.feature3Options.selectedOption.value,
-            quota : $scope.quota
+            quota : $scope.quota,
+            description : $scope.description
         }
 
-        console.log(newApiKeyRequest);
-
-        ngDialog.close();
+        apikeyUserFactory.save( newApiKeyRequest ).$promise.then(
+                            function (response) {
+                                //$scope.showLoading = false;
+                                ngDialog.close();
+                                $state.go($state.current, {}, {reload: true});  
+                                        
+                            },
+                            function (response) {
+                                $scope.message = "Error: " + response.status + " " + response.statusText;
+                                ngDialog.close();
+                                //$scope.showLoading = false;
+                            });
     }
 
     $scope.cancelNgDialogue = function(){
@@ -176,6 +200,12 @@ angular.module('apiKeyGenerator')
         
         ngDialog.close();
 
+    };
+}])
+
+.directive('redirectToactions', [ '$state', function($state) {
+    $state.go('app.actions');
+    return {
     };
 }])
 ;

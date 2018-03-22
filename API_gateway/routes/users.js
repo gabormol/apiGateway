@@ -84,7 +84,6 @@ router.get('/mydata', Verify.verifyOrdinaryUser, function(req, res) {
 });
 
 router.put('/mydata', Verify.verifyOrdinaryUser, function(req, res) {
-    //console.log("LOFASZ SET USER PROPERTIES: username: " + req.decoded.username);
     var allowedData = req.body;
     
     delete allowedData.salt;

@@ -129,7 +129,21 @@ body {
     text-decoration: underline;
     
 }
-    
+   
+.apikeycell {
+width: 500px;
+word-break:break-word;
+}
+
+.apikeydescriptioncell {
+width: 250px;
+word-break:break-word;
+}
+
+.th, td {
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
     @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }

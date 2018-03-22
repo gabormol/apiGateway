@@ -12,8 +12,12 @@ var apiKeyEntrySchema = new Schema({
     },
     apiKey: {
         type: String,
+        required: true
+    },
+    description: {
+        type: String,
         required: false
-    }    
+    }        
 }, {
     timestamps: true
 });

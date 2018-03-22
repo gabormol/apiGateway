@@ -144,22 +144,19 @@ angular.module('apiKeyGenerator')
     
 }])
 
-.factory('userSettingsFactory', ['$resource', 'baseURL', function ($resource, baseURL) {
-
-    return $resource(baseURL + "users/mydata", null, {
+.factory('apikeyFactory', ['$resource', 'baseURL', function ($resource, baseURL) { 
+        return $resource(baseURL + "apikeyusers/apikeys", null, {
             'update': {
                 method: 'PUT'
             }
         });
-
 }])
 
-.factory('apikeyFactory', ['$resource', 'baseURL', function ($resource, baseURL) {
-
+.factory('apikeyUserFactory', ['$resource', 'baseURL', function ($resource, baseURL) { 
         return $resource(baseURL + "apikeyusers", null, {
             'update': {
                 method: 'PUT'
             }
         });
+}]);
 
-}])
