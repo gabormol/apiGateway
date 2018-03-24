@@ -93,8 +93,10 @@ angular.module('apiKeyGenerator')
                                         
                             },
                             function (response) {
+                                console.log(response);
                                 $scope.message = "Error: " + response.status + " " + response.statusText;
-                                ngDialog.close();
+                                alert(response.data.message);
+                                //ngDialog.close();
                                 //$scope.showLoading = false;
                             });
     }
