@@ -14,6 +14,10 @@ var apiKeyEntrySchema = new Schema({
         type: String,
         required: true
     },
+    apiKeyToProvide: {
+        type: String,
+        required: true
+    },
     description: {
         type: String,
         required: false

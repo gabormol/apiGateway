@@ -34,7 +34,7 @@ operationsRouter.route('/data/')
         url: 'http://localhost:3000/data',
         headers: {
             'Content-Type': 'application/json',
-            'api-gw-identifyer-token': req.headers['api-key-token']
+            'api-gw-identifyer-token': req.useJwtToken
         }
     };
 
@@ -49,7 +49,7 @@ operationsRouter.route('/data/')
         url: 'http://localhost:3000/data',
         headers: {
             'Content-Type': 'application/json',
-            'api-gw-identifyer-token': req.headers['api-key-token']
+            'api-gw-identifyer-token': req.useJwtToken
         },
         form: req.body
     };
@@ -69,7 +69,7 @@ operationsRouter.route('/data/:dataId')
         url: newUrl,
         headers: {
             'Content-Type': 'application/json',
-            'api-gw-identifyer-token': req.headers['api-key-token']
+            'api-gw-identifyer-token': req.useJwtToken
         }
     };
 
@@ -85,7 +85,7 @@ operationsRouter.route('/data/:dataId')
         url: newUrl,
         headers: {
             'Content-Type': 'application/json',
-            'api-gw-identifyer-token': req.headers['api-key-token']
+            'api-gw-identifyer-token': req.useJwtToken
         },
         json: req.body
     };
@@ -102,7 +102,7 @@ operationsRouter.route('/data/:dataId')
         url: newUrl,
         headers: {
             'Content-Type': 'application/json',
-            'api-gw-identifyer-token': req.headers['api-key-token']
+            'api-gw-identifyer-token': req.useJwtToken
         }
     };
 
@@ -121,7 +121,7 @@ operationsRouter.route('/anotherdata/')
         url: 'http://localhost:3001/anotherdata',
         headers: {
             'Content-Type': 'application/json',
-            'api-gw-identifyer-token': req.headers['api-key-token']
+            'api-gw-identifyer-token': req.useJwtToken
         }
     };
 
@@ -137,7 +137,7 @@ operationsRouter.route('/anotherdata/')
         url: 'http://localhost:3001/anotherdata',
         headers: {
             'Content-Type': 'application/json',
-            'api-gw-identifyer-token': req.headers['api-key-token']
+            'api-gw-identifyer-token': req.useJwtToken
         },
         form: req.body
     };
@@ -157,7 +157,7 @@ operationsRouter.route('/anotherdata/:dataId')
         url: newUrl,
         headers: {
             'Content-Type': 'application/json',
-            'api-gw-identifyer-token': req.headers['api-key-token']
+            'api-gw-identifyer-token': req.useJwtToken
         }
     };
 
@@ -173,7 +173,7 @@ operationsRouter.route('/anotherdata/:dataId')
         url: newUrl,
         headers: {
             'Content-Type': 'application/json',
-            'api-gw-identifyer-token': req.headers['api-key-token']
+            'api-gw-identifyer-token': req.useJwtToken
         },
         json: req.body
     };
@@ -190,7 +190,7 @@ operationsRouter.route('/anotherdata/:dataId')
         url: newUrl,
         headers: {
             'Content-Type': 'application/json',
-            'api-gw-identifyer-token': req.headers['api-key-token']
+            'api-gw-identifyer-token': req.useJwtToken
         }
     };
 

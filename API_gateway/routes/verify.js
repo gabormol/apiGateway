@@ -1,6 +1,9 @@
 var User = require('../models/user');
 var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('../config.js');
+var ApiKeyEntry = require('../models/apikeyentry');
+
+var Utils = require('./utils.js');
 
 exports.getToken = function (user, isAPIkey) {
     if(isAPIkey){
@@ -45,23 +48,19 @@ exports.verifyOrdinaryUser = function (req, res, next) {
 
 exports.verifyApiUser = function (req, res, next) {
     // check header or url parameters or post parameters for token
-    var token = req.body.token || req.query.token || req.headers['api-key-token'];
+    var token = req.headers['api-key-token'];
 
     // decode token
     if (token) {
-        // verifies secret and checks exp
-        jwt.verify(token, config.secretKey, function (err, decoded) {
-            if (err) {
-                var err = new Error('You are not authenticated!');
-                err.status = 401;
-                return next(err);
-            } else {
-                console.log(decoded);
-                // if everything is good, save to request for use in other routes
-                req.decoded = decoded;
-                next();
-            }
-        });
+        ApiKeyEntry.findOne({'apiKeyToProvide' : { $eq: token}}, function (err,result) {
+            if (err) next(err);
+
+            // Let's store the real JWT token to the API key provided
+            req.useJwtToken = result.apiKey;
+            
+            next();
+    
+        })
     } else {
         // if there is no token
         // return an error

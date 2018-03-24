@@ -10,6 +10,8 @@ var ApiKeyEntry = require('../models/apikeyentry');
 var apikeyuserRouter = express.Router();
 apikeyuserRouter.use(bodyParser.json());
 
+var Utils = require('./utils');
+
 apikeyuserRouter.route('/apikeys')
 .all(Verify.verifyOrdinaryUser) //this will decode the req
 .get(function (req, res, next) {
@@ -55,6 +57,7 @@ apikeyuserRouter.route('/')
         var newApiKey = {
             "application" : appName,
             "apiKey" : apiKey,
+            "apiKeyToProvide" : Utils.generateApiKeyString(),
             "ownedBy" : userId,
             "description" : description
         }
