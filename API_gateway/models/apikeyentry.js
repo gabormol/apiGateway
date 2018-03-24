@@ -8,7 +8,8 @@ var apiKeyEntrySchema = new Schema({
     },
     application:{
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     apiKey: {
         type: String,

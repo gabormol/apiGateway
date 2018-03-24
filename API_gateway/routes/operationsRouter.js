@@ -13,7 +13,7 @@ operationsRouter.use(bodyParser.json());
 var restClient = require('./restclient');
 
 operationsRouter.route('/')
-.all(Verify.verifyApiUser) //this will decode the req
+.all(Verify.verifyApiUser) 
 .get(function (req, res, next) {
     
     console.log("Operation permitted for API user");
@@ -25,8 +25,23 @@ operationsRouter.route('/')
 })
 
 operationsRouter.route('/data/')
-.all(Verify.verifyApiUser) //this will decode the req
+.all(Verify.verifyApiUser) // will create useJwtToken in req
 .get(function (req, res, next) {
+
+    if(Verify.verifyAllowance(req, "feat1")){
+        console.log("Operation allowance verified, operation can continue...");
+    } else {
+        console.log("Operation not allowed, rejecting...");
+        var err = new Error('Feature is not allowed for this API key');
+            err.status = 404;
+            return next(err);
+    }
+    
+    if(Verify.verifyQuota){
+        console.log("Quota verified, operation can continue...");
+    } else {
+        console.log("Quota exceeded, rejecting...");
+    }
     
     console.log("GET operation permitted for API user");
 
@@ -42,6 +57,15 @@ operationsRouter.route('/data/')
     
 })
 .post(function (req, res, next) {
+
+    if(Verify.verifyAllowance(req, "feat1")){
+        console.log("Operation allowance verified, operation can continue...");
+    } else {
+        console.log("Operation not allowed, rejecting...");
+        var err = new Error('Feature is not allowed for this API key');
+            err.status = 404;
+            return next(err);
+    }
     
     console.log("POST Operation permitted for API user");
 
@@ -61,6 +85,15 @@ operationsRouter.route('/data/')
 operationsRouter.route('/data/:dataId')
 .all(Verify.verifyApiUser) //this will decode the req
 .get(function (req, res, next) {
+
+    if(Verify.verifyAllowance(req, "feat1")){
+        console.log("Operation allowance verified, operation can continue...");
+    } else {
+        console.log("Operation not allowed, rejecting...");
+        var err = new Error('Feature is not allowed for this API key');
+            err.status = 404;
+            return next(err);
+    }
     
     console.log("GET operation permitted for API user");
     var newUrl = 'http://localhost:3000/data/' + req.params.dataId;
@@ -77,6 +110,15 @@ operationsRouter.route('/data/:dataId')
     
 })
 .put(function (req, res, next) {
+
+    if(Verify.verifyAllowance(req, "feat1")){
+        console.log("Operation allowance verified, operation can continue...");
+    } else {
+        console.log("Operation not allowed, rejecting...");
+        var err = new Error('Feature is not allowed for this API key');
+            err.status = 404;
+            return next(err);
+    }
     
     console.log("PUT operation permitted for API user");
     var newUrl = 'http://localhost:3000/data/' + req.params.dataId;
@@ -94,6 +136,15 @@ operationsRouter.route('/data/:dataId')
     
 })
 .delete(function (req, res, next) {
+
+    if(Verify.verifyAllowance(req, "feat1")){
+        console.log("Operation allowance verified, operation can continue...");
+    } else {
+        console.log("Operation not allowed, rejecting...");
+        var err = new Error('Feature is not allowed for this API key');
+            err.status = 404;
+            return next(err);
+    }
     
     console.log("DELETE operation permitted for API user");
     var newUrl = 'http://localhost:3000/data/' + req.params.dataId;
@@ -115,6 +166,15 @@ operationsRouter.route('/anotherdata/')
 .all(Verify.verifyApiUser) //this will decode the req
 .get(function (req, res, next) {
     
+    if(Verify.verifyAllowance(req, "feat2")){
+        console.log("Operation allowance verified, operation can continue...");
+    } else {
+        console.log("Operation not allowed, rejecting...");
+        var err = new Error('Feature is not allowed for this API key');
+            err.status = 404;
+            return next(err);
+    }
+
     console.log("GET operation permitted for API user");
         
     var options = {
@@ -130,6 +190,15 @@ operationsRouter.route('/anotherdata/')
     
 })
 .post(function (req, res, next) {
+
+    if(Verify.verifyAllowance(req, "feat2")){
+        console.log("Operation allowance verified, operation can continue...");
+    } else {
+        console.log("Operation not allowed, rejecting...");
+        var err = new Error('Feature is not allowed for this API key');
+            err.status = 404;
+            return next(err);
+    }
     
     console.log("POST Operation permitted for API user");
 
@@ -149,6 +218,15 @@ operationsRouter.route('/anotherdata/')
 operationsRouter.route('/anotherdata/:dataId')
 .all(Verify.verifyApiUser) //this will decode the req
 .get(function (req, res, next) {
+
+    if(Verify.verifyAllowance(req, "feat2")){
+        console.log("Operation allowance verified, operation can continue...");
+    } else {
+        console.log("Operation not allowed, rejecting...");
+        var err = new Error('Feature is not allowed for this API key');
+            err.status = 404;
+            return next(err);
+    }
     
     console.log("GET operation permitted for API user");
     var newUrl = 'http://localhost:3001/anotherdata/' + req.params.dataId;
@@ -165,6 +243,15 @@ operationsRouter.route('/anotherdata/:dataId')
     
 })
 .put(function (req, res, next) {
+
+    if(Verify.verifyAllowance(req, "feat2")){
+        console.log("Operation allowance verified, operation can continue...");
+    } else {
+        console.log("Operation not allowed, rejecting...");
+        var err = new Error('Feature is not allowed for this API key');
+            err.status = 404;
+            return next(err);
+    }
     
     console.log("PUT operation permitted for API user");
     var newUrl = 'http://localhost:3001/anotherdata/' + req.params.dataId;
@@ -182,6 +269,15 @@ operationsRouter.route('/anotherdata/:dataId')
     
 })
 .delete(function (req, res, next) {
+
+    if(Verify.verifyAllowance(req, "feat2")){
+        console.log("Operation allowance verified, operation can continue...");
+    } else {
+        console.log("Operation not allowed, rejecting...");
+        var err = new Error('Feature is not allowed for this API key');
+            err.status = 404;
+            return next(err);
+    }
     
     console.log("DELETE operation permitted for API user");
     var newUrl = 'http://localhost:3001/anotherdata/' + req.params.dataId;

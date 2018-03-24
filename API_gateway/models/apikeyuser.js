@@ -9,6 +9,11 @@ var apikeyuserSchema = new Schema({
     },
     application:{
         type: String,
+        required: true,
+        unique: true
+    },
+    jwtToken:{
+        type: String,
         required: true
     },
     feat1: {

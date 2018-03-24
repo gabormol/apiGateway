@@ -41,29 +41,40 @@ apikeyuserRouter.route('/')
     var userId = req.decoded._id;
     var newApikeyuser = req.body;
     newApikeyuser.ownedBy = userId;
+
+    var tokenDataObject = req.body;
+    tokenDataObject.isApiKey = true;
+    var jwtToken = Verify.getToken(tokenDataObject, true);
+    newApikeyuser.jwtToken = jwtToken;
+
     var appName = req.body.application;
     var description = req.body.description;
     Apikeyuser.create(newApikeyuser, function(err, usage) {
-        if (err) throw err;
+        if (err) {
+            var error = new Error('Application name already exist!');
+            error.status = 403;
+            console.log("ERROR1");
+            return next(error);
+        };
 
         console.log('New API key user stored!');
         console.log(usage);
 
-        var tokenDataObject = req.body;
-        tokenDataObject.isApiKey = true;
-
-        var apiKey = Verify.getToken(tokenDataObject, true);
-
         var newApiKey = {
             "application" : appName,
-            "apiKey" : apiKey,
+            "apiKey" : jwtToken,
             "apiKeyToProvide" : Utils.generateApiKeyString(),
             "ownedBy" : userId,
             "description" : description
         }
         ApiKeyEntry.create(newApiKey, function(err, apiKeyEntry) {
 
-            if (err) throw err;
+            if (err) {
+                console.log("ERROR2");
+                //var error = new Error('Application name already exist!');
+                //err.status = 404;
+                return next(err);
+            };
 
             console.log('API Key added to database...');
         })

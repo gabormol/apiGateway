@@ -2,12 +2,13 @@ var User = require('../models/user');
 var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('../config.js');
 var ApiKeyEntry = require('../models/apikeyentry');
+var Apikeyuser = require('../models/apikeyuser');
 
 var Utils = require('./utils.js');
 
 exports.getToken = function (user, isAPIkey) {
     if(isAPIkey){
-        console.log('API key requested');
+        console.log('API key creation requested');
         return jwt.sign(user, config.secretKey, {
             expiresIn: 2*43200000
         });
@@ -52,14 +53,22 @@ exports.verifyApiUser = function (req, res, next) {
 
     // decode token
     if (token) {
-        ApiKeyEntry.findOne({'apiKeyToProvide' : { $eq: token}}, function (err,result) {
+        ApiKeyEntry.findOne({'apiKeyToProvide' : { $eq: token}}, function (err, resultApiKeyEntry) {
             if (err) next(err);
 
             // Let's store the real JWT token to the API key provided
-            req.useJwtToken = result.apiKey;
-            
-            next();
-    
+            var correspondingJwtToken = resultApiKeyEntry.apiKey;
+            req.useJwtToken = correspondingJwtToken;
+            console.log(resultApiKeyEntry);
+            console.log(correspondingJwtToken);
+            // Need to find a user exactly for that jwtToken
+            Apikeyuser.findOne({'jwtToken': {$eq: correspondingJwtToken}}, function (err, resultApiKeyUser) {
+                if (err) next(err);
+                console.log("Found API Key user data!"); 
+                req.apiKeyUserData = resultApiKeyUser;
+                console.log(resultApiKeyUser);
+                next();
+            })
         })
     } else {
         // if there is no token
@@ -67,6 +76,23 @@ exports.verifyApiUser = function (req, res, next) {
         var err = new Error('No token provided!');
         err.status = 403;
         return next(err);
+    }
+};
+
+exports.verifyQuota = function (req) {
+    console.log("Quota verification...");
+    return true;
+};
+
+exports.verifyAllowance = function (req, feature) {
+    console.log("Feature " + feature + " allowance verification...");
+    console.log(req.apiKeyUserData[feature]);
+    if (req.apiKeyUserData[feature]){
+        console.log("Feature allowed!");
+        return true;
+    } else {
+        console.log("Feature not allowed!!!");
+        return false;
     }
 };
 
