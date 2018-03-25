@@ -5,7 +5,6 @@ var mongoose = require('mongoose');
 var Apikeyuser = require('../models/apikeyuser');
 var User = require('../models/user');
 var Verify = require('./verify');
-var ApiKeyEntry = require('../models/apikeyentry');
 
 var operationsRouter = express.Router();
 operationsRouter.use(bodyParser.json());

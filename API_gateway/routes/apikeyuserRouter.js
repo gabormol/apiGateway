@@ -62,7 +62,7 @@ apikeyuserRouter.route('/')
 
         var newApiKey = {
             "application" : appName,
-            "apiKey" : jwtToken,
+            "jwtTokenForApiKey" : jwtToken,
             "apiKeyToProvide" : Utils.generateApiKeyString(),
             "ownedBy" : userId,
             "description" : description

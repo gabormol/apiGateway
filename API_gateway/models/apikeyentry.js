@@ -11,7 +11,7 @@ var apiKeyEntrySchema = new Schema({
         required: true,
         unique: true
     },
-    apiKey: {
+    jwtTokenForApiKey: {
         type: String,
         required: true
     },

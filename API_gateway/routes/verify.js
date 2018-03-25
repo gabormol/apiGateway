@@ -57,7 +57,7 @@ exports.verifyApiUser = function (req, res, next) {
             if (err) next(err);
 
             // Let's store the real JWT token to the API key provided
-            var correspondingJwtToken = resultApiKeyEntry.apiKey;
+            var correspondingJwtToken = resultApiKeyEntry.jwtTokenForApiKey;
             req.useJwtToken = correspondingJwtToken;
             console.log(resultApiKeyEntry);
             console.log(correspondingJwtToken);
