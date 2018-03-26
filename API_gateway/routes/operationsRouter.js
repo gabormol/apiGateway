@@ -81,7 +81,7 @@ operationsRouter.route('/data/')
 })
 
 operationsRouter.route('/data/:dataId')
-.all(Verify.verifyApiUser) //this will decode the req
+.all(Verify.verifyApiUser) // will create useJwtToken in req
 .get(function (req, res, next) {
 
     if(Verify.verifyAllowance(req, "feat1")){
@@ -161,7 +161,7 @@ operationsRouter.route('/data/:dataId')
 
 
 operationsRouter.route('/anotherdata/')
-.all(Verify.verifyApiUser) //this will decode the req
+.all(Verify.verifyApiUser) // will create useJwtToken in req
 .get(function (req, res, next) {
     
     if(Verify.verifyAllowance(req, "feat2")){
@@ -214,7 +214,7 @@ operationsRouter.route('/anotherdata/')
 })
 
 operationsRouter.route('/anotherdata/:dataId')
-.all(Verify.verifyApiUser) //this will decode the req
+.all(Verify.verifyApiUser) // will create useJwtToken in req
 .get(function (req, res, next) {
 
     if(Verify.verifyAllowance(req, "feat2")){
