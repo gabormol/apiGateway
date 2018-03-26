@@ -144,16 +144,8 @@ angular.module('apiKeyGenerator')
     
 }])
 
-.factory('apikeyFactory', ['$resource', 'baseURL', function ($resource, baseURL) { 
-        return $resource(baseURL + "apikeyusers", null, {
-            'update': {
-                method: 'PUT'
-            }
-        });
-}])
-
 .factory('apikeyUserFactory', ['$resource', 'baseURL', function ($resource, baseURL) { 
-        return $resource(baseURL + "apikeyusers", null, {
+        return $resource(baseURL + "apikeyusers/:id", null, {
             'update': {
                 method: 'PUT'
             }

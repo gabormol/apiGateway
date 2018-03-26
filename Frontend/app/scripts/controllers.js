@@ -3,7 +3,7 @@
 angular.module('apiKeyGenerator')
 
 //apikeyactions.html
-.controller('ApiKeyDisplayController', ['$scope', 'AuthFactory', 'apikeyUserFactory', 'ngDialog', function ($scope, AuthFactory, apikeyUserFactory, ngDialog) {
+.controller('ApiKeyDisplayController', ['$scope', 'AuthFactory', 'apikeyUserFactory', 'ngDialog', '$state',function ($scope, AuthFactory, apikeyUserFactory, ngDialog, $state) {
     
     $scope.username = '';
     $scope.application = '';
@@ -41,6 +41,28 @@ angular.module('apiKeyGenerator')
             $scope.message = "Get username error: " + response.status + " " + response.statusText;
         }
     );
+
+    $scope.deleteApiKey = function(id) {
+
+        $scope.apiKeyId = id;
+
+        ngDialog.open({ template: 'views/deleteapikey.html', scope: $scope, className: 'ngdialog-theme-default',    controller:"ApiKeyDisplayController" });
+    };
+
+    $scope.doDeleteApiKey = function(apiKeyId) {
+
+        $scope.apiKeyId = apiKeyId;
+
+        apikeyUserFactory.delete({id: apiKeyId}).$promise.then(
+                            function (response) {
+                                ngDialog.close();
+                                $state.go($state.current, {}, {reload: true});           
+                            },
+                            function (response) {
+                                $scope.message = "Error: " + response.status + " " + response.statusText;
+                                ngDialog.close();
+                            });
+    };
     
 }])
 
