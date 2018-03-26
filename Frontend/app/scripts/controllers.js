@@ -3,7 +3,7 @@
 angular.module('apiKeyGenerator')
 
 //apikeyactions.html
-.controller('ApiKeyDisplayController', ['$scope', 'AuthFactory', 'apikeyFactory', 'ngDialog', function ($scope, AuthFactory, apikeyFactory, ngDialog) {
+.controller('ApiKeyDisplayController', ['$scope', 'AuthFactory', 'apikeyUserFactory', 'ngDialog', function ($scope, AuthFactory, apikeyUserFactory, ngDialog) {
     
     $scope.username = '';
     $scope.application = '';
@@ -31,7 +31,7 @@ angular.module('apiKeyGenerator')
 
     };
 
-    var apiKeys = apikeyFactory.query(
+    var apiKeys = apikeyUserFactory.query(
         function (response){
             for (var i = 0; i < response.length; i++) {
                 $scope.apiKeys.push(response[i]);

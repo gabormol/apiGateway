@@ -16,6 +16,13 @@ var apikeyuserSchema = new Schema({
         type: String,
         required: true
     },
+    apiKeyToProvide:{
+        type: String,
+        required: true
+    },
+    description:{
+        type: String
+    },
     feat1: {
         type: Boolean,
         dafault: false

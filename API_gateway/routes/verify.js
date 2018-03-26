@@ -1,7 +1,6 @@
 var User = require('../models/user');
 var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('../config.js');
-var ApiKeyEntry = require('../models/apikeyentry');
 var Apikeyuser = require('../models/apikeyuser');
 
 var Utils = require('./utils.js');
@@ -50,25 +49,18 @@ exports.verifyOrdinaryUser = function (req, res, next) {
 exports.verifyApiUser = function (req, res, next) {
     // check header or url parameters or post parameters for token
     var token = req.headers['api-key-token'];
-
     // decode token
     if (token) {
-        ApiKeyEntry.findOne({'apiKeyToProvide' : { $eq: token}}, function (err, resultApiKeyEntry) {
+        Apikeyuser.findOne({'apiKeyToProvide' : { $eq: token}}, function (err, resultApiKeyEntry) {
             if (err) next(err);
-
             // Let's store the real JWT token to the API key provided
-            var correspondingJwtToken = resultApiKeyEntry.jwtTokenForApiKey;
+            var correspondingJwtToken = resultApiKeyEntry.jwtToken;
             req.useJwtToken = correspondingJwtToken;
             console.log(resultApiKeyEntry);
             console.log(correspondingJwtToken);
-            // Need to find a user exactly for that jwtToken
-            Apikeyuser.findOne({'jwtToken': {$eq: correspondingJwtToken}}, function (err, resultApiKeyUser) {
-                if (err) next(err);
-                console.log("Found API Key user data!"); 
-                req.apiKeyUserData = resultApiKeyUser;
-                console.log(resultApiKeyUser);
-                next();
-            })
+
+            req.apiKeyUserData = resultApiKeyEntry;
+            next();     
         })
     } else {
         // if there is no token

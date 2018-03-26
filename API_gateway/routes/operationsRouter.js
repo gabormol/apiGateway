@@ -26,7 +26,6 @@ operationsRouter.route('/')
 operationsRouter.route('/data/')
 .all(Verify.verifyApiUser) // will create useJwtToken in req
 .get(function (req, res, next) {
-
     if(Verify.verifyAllowance(req, "feat1")){
         console.log("Operation allowance verified, operation can continue...");
     } else {
