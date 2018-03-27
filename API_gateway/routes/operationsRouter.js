@@ -10,6 +10,7 @@ var operationsRouter = express.Router();
 operationsRouter.use(bodyParser.json());
 
 var restClient = require('./restclient');
+var stats = require('./stats')
 
 operationsRouter.route('/')
 .all(Verify.verifyApiUser) 
@@ -30,6 +31,8 @@ operationsRouter.route('/data/')
         console.log("Operation allowance verified, operation can continue...");
     } else {
         console.log("Operation not allowed, rejecting...");
+        //Update statistics
+        stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat1", "GET", false);
         var err = new Error('Feature is not allowed for this API key');
             err.status = 404;
             return next(err);
@@ -40,6 +43,9 @@ operationsRouter.route('/data/')
     } else {
         console.log("Quota exceeded, rejecting...");
     }
+    
+    //Update statistics
+    stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat1", "GET", true);
     
     console.log("GET operation permitted for API user");
 
@@ -60,10 +66,15 @@ operationsRouter.route('/data/')
         console.log("Operation allowance verified, operation can continue...");
     } else {
         console.log("Operation not allowed, rejecting...");
+        //Update statistics
+        stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat1", "POST", false);
         var err = new Error('Feature is not allowed for this API key');
             err.status = 404;
             return next(err);
     }
+
+    //Update statistics
+    stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat1", "POST", true);
     
     console.log("POST Operation permitted for API user");
 
@@ -88,11 +99,16 @@ operationsRouter.route('/data/:dataId')
         console.log("Operation allowance verified, operation can continue...");
     } else {
         console.log("Operation not allowed, rejecting...");
+        //Update statistics
+        stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat1", "GET", false);
         var err = new Error('Feature is not allowed for this API key');
             err.status = 404;
             return next(err);
     }
     
+    //Update statistics
+    stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat1", "GET", true);
+
     console.log("GET operation permitted for API user");
     var newUrl = 'http://localhost:3000/data/' + req.params.dataId;
 
@@ -113,11 +129,15 @@ operationsRouter.route('/data/:dataId')
         console.log("Operation allowance verified, operation can continue...");
     } else {
         console.log("Operation not allowed, rejecting...");
+        //Update statistics
+        stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat1", "PUT", false);
         var err = new Error('Feature is not allowed for this API key');
             err.status = 404;
             return next(err);
     }
     
+    //Update statistics
+    stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat1", "PUT", true);
     console.log("PUT operation permitted for API user");
     var newUrl = 'http://localhost:3000/data/' + req.params.dataId;
 
@@ -139,11 +159,15 @@ operationsRouter.route('/data/:dataId')
         console.log("Operation allowance verified, operation can continue...");
     } else {
         console.log("Operation not allowed, rejecting...");
+        //Update statistics
+        stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat1", "DELETE", false);
         var err = new Error('Feature is not allowed for this API key');
             err.status = 404;
             return next(err);
     }
     
+    //Update statistics
+    stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat1", "DELETE", true);
     console.log("DELETE operation permitted for API user");
     var newUrl = 'http://localhost:3000/data/' + req.params.dataId;
 
@@ -168,11 +192,15 @@ operationsRouter.route('/anotherdata/')
         console.log("Operation allowance verified, operation can continue...");
     } else {
         console.log("Operation not allowed, rejecting...");
+        //Update statistics
+        stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat2", "GET", false);
         var err = new Error('Feature is not allowed for this API key');
             err.status = 404;
             return next(err);
     }
 
+    //Update statistics
+    stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat2", "GET", true);
     console.log("GET operation permitted for API user");
         
     var options = {
@@ -193,11 +221,15 @@ operationsRouter.route('/anotherdata/')
         console.log("Operation allowance verified, operation can continue...");
     } else {
         console.log("Operation not allowed, rejecting...");
+        //Update statistics
+        stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat2", "POST", false);
         var err = new Error('Feature is not allowed for this API key');
             err.status = 404;
             return next(err);
     }
     
+    //Update statistics
+    stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat2", "POST", true);
     console.log("POST Operation permitted for API user");
 
     var options = {
@@ -221,12 +253,17 @@ operationsRouter.route('/anotherdata/:dataId')
         console.log("Operation allowance verified, operation can continue...");
     } else {
         console.log("Operation not allowed, rejecting...");
+        //Update statistics
+        stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat2", "GET", false);
         var err = new Error('Feature is not allowed for this API key');
             err.status = 404;
             return next(err);
     }
     
+    //Update statistics
+    stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat2", "GET", true);
     console.log("GET operation permitted for API user");
+
     var newUrl = 'http://localhost:3001/anotherdata/' + req.params.dataId;
 
     var options = {
@@ -246,11 +283,15 @@ operationsRouter.route('/anotherdata/:dataId')
         console.log("Operation allowance verified, operation can continue...");
     } else {
         console.log("Operation not allowed, rejecting...");
+        //Update statistics
+        stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat2", "PUT", false);
         var err = new Error('Feature is not allowed for this API key');
             err.status = 404;
             return next(err);
     }
     
+    //Update statistics
+    stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat2", "PUT", true);
     console.log("PUT operation permitted for API user");
     var newUrl = 'http://localhost:3001/anotherdata/' + req.params.dataId;
 
@@ -272,11 +313,15 @@ operationsRouter.route('/anotherdata/:dataId')
         console.log("Operation allowance verified, operation can continue...");
     } else {
         console.log("Operation not allowed, rejecting...");
+        //Update statistics
+        stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat2", "DELETE", false);
         var err = new Error('Feature is not allowed for this API key');
             err.status = 404;
             return next(err);
     }
     
+    //Update statistics
+    stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat2", "DELETE", true);
     console.log("DELETE operation permitted for API user");
     var newUrl = 'http://localhost:3001/anotherdata/' + req.params.dataId;
 

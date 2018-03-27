@@ -1,4 +1,4 @@
-exports.generateApiKeyString = function makeid() {
+exports.generateApiKeyString = function() {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   
