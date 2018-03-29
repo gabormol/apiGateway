@@ -12,6 +12,8 @@ operationsRouter.use(bodyParser.json());
 var restClient = require('./restclient');
 var stats = require('./stats')
 
+var cacheForQuota = require('memory-cache');
+
 operationsRouter.route('/')
 .all(Verify.verifyApiUser) 
 .get(function (req, res, next) {
@@ -38,10 +40,15 @@ operationsRouter.route('/data/')
             return next(err);
     }
     
-    if(Verify.verifyQuota){
+    if(Verify.verifyQuota(cacheForQuota, req.apiKeyUserData)){
         console.log("Quota verified, operation can continue...");
     } else {
         console.log("Quota exceeded, rejecting...");
+        //Update statistics
+        stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat1", "GET", false);
+        var err = new Error('Requested quota exceeded by the application!');
+            err.status = 404;
+            return next(err);
     }
     
     //Update statistics
@@ -69,6 +76,17 @@ operationsRouter.route('/data/')
         //Update statistics
         stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat1", "POST", false);
         var err = new Error('Feature is not allowed for this API key');
+            err.status = 404;
+            return next(err);
+    }
+
+    if(Verify.verifyQuota(cacheForQuota, req.apiKeyUserData)){
+        console.log("Quota verified, operation can continue...");
+    } else {
+        console.log("Quota exceeded, rejecting...");
+        //Update statistics
+        stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat1", "POST", false);
+        var err = new Error('Requested quota exceeded by the application!');
             err.status = 404;
             return next(err);
     }
@@ -105,6 +123,17 @@ operationsRouter.route('/data/:dataId')
             err.status = 404;
             return next(err);
     }
+
+    if(Verify.verifyQuota(cacheForQuota, req.apiKeyUserData)){
+        console.log("Quota verified, operation can continue...");
+    } else {
+        //Update statistics
+        stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat1", "GET", false);
+        console.log("Quota exceeded, rejecting...");
+        var err = new Error('Requested quota exceeded by the application!');
+            err.status = 404;
+            return next(err);
+    }
     
     //Update statistics
     stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat1", "GET", true);
@@ -135,6 +164,17 @@ operationsRouter.route('/data/:dataId')
             err.status = 404;
             return next(err);
     }
+
+    if(Verify.verifyQuota(cacheForQuota, req.apiKeyUserData)){
+        console.log("Quota verified, operation can continue...");
+    } else {
+        //Update statistics
+        stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat1", "PUT", false);
+        console.log("Quota exceeded, rejecting...");
+        var err = new Error('Requested quota exceeded by the application!');
+            err.status = 404;
+            return next(err);
+    }
     
     //Update statistics
     stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat1", "PUT", true);
@@ -162,6 +202,17 @@ operationsRouter.route('/data/:dataId')
         //Update statistics
         stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat1", "DELETE", false);
         var err = new Error('Feature is not allowed for this API key');
+            err.status = 404;
+            return next(err);
+    }
+
+    if(Verify.verifyQuota(cacheForQuota, req.apiKeyUserData)){
+        console.log("Quota verified, operation can continue...");
+    } else {
+        //Update statistics
+        stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat1", "DELETE", false);
+        console.log("Quota exceeded, rejecting...");
+        var err = new Error('Requested quota exceeded by the application!');
             err.status = 404;
             return next(err);
     }
@@ -199,6 +250,17 @@ operationsRouter.route('/anotherdata/')
             return next(err);
     }
 
+    if(Verify.verifyQuota(cacheForQuota, req.apiKeyUserData)){
+        console.log("Quota verified, operation can continue...");
+    } else {
+        //Update statistics
+        stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat2", "GET", false);
+        console.log("Quota exceeded, rejecting...");
+        var err = new Error('Requested quota exceeded by the application!');
+            err.status = 404;
+            return next(err);
+    }
+
     //Update statistics
     stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat2", "GET", true);
     console.log("GET operation permitted for API user");
@@ -224,6 +286,17 @@ operationsRouter.route('/anotherdata/')
         //Update statistics
         stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat2", "POST", false);
         var err = new Error('Feature is not allowed for this API key');
+            err.status = 404;
+            return next(err);
+    }
+
+    if(Verify.verifyQuota(cacheForQuota, req.apiKeyUserData)){
+        console.log("Quota verified, operation can continue...");
+    } else {
+        //Update statistics
+        stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat2", "POST", false);
+        console.log("Quota exceeded, rejecting...");
+        var err = new Error('Requested quota exceeded by the application!');
             err.status = 404;
             return next(err);
     }
@@ -259,6 +332,17 @@ operationsRouter.route('/anotherdata/:dataId')
             err.status = 404;
             return next(err);
     }
+
+    if(Verify.verifyQuota(cacheForQuota, req.apiKeyUserData)){
+        console.log("Quota verified, operation can continue...");
+    } else {
+        //Update statistics
+        stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat2", "GET", false);
+        console.log("Quota exceeded, rejecting...");
+        var err = new Error('Requested quota exceeded by the application!');
+            err.status = 404;
+            return next(err);
+    }
     
     //Update statistics
     stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat2", "GET", true);
@@ -289,6 +373,17 @@ operationsRouter.route('/anotherdata/:dataId')
             err.status = 404;
             return next(err);
     }
+
+    if(Verify.verifyQuota(cacheForQuota, req.apiKeyUserData)){
+        console.log("Quota verified, operation can continue...");
+    } else {
+        //Update statistics
+        stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat2", "PUT", false);
+        console.log("Quota exceeded, rejecting...");
+        var err = new Error('Requested quota exceeded by the application!');
+            err.status = 404;
+            return next(err);
+    }
     
     //Update statistics
     stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat2", "PUT", true);
@@ -316,6 +411,17 @@ operationsRouter.route('/anotherdata/:dataId')
         //Update statistics
         stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat2", "DELETE", false);
         var err = new Error('Feature is not allowed for this API key');
+            err.status = 404;
+            return next(err);
+    }
+
+    if(Verify.verifyQuota(cacheForQuota, req.apiKeyUserData)){
+        console.log("Quota verified, operation can continue...");
+    } else {
+        //Update statistics
+        stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat2", "DELETE", false);
+        console.log("Quota exceeded, rejecting...");
+        var err = new Error('Requested quota exceeded by the application!');
             err.status = 404;
             return next(err);
     }

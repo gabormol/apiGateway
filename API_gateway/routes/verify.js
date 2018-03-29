@@ -71,8 +71,42 @@ exports.verifyApiUser = function (req, res, next) {
     }
 };
 
-exports.verifyQuota = function (req) {
+exports.verifyQuota = function (cacheForQuota, apikeyUserInfo) {
     console.log("Quota verification...");
+    var actualQuotaValue = cacheForQuota.get(apikeyUserInfo.application);
+    console.log(actualQuotaValue);
+    var date = new Date();
+    var actualMinute = date.getMinutes();
+    var requestsInMinute; 
+
+    var userQuota = cacheForQuota.get(apikeyUserInfo.application);
+
+    if (userQuota === undefined || userQuota === null) {
+        console.log('Creating new quota object');
+        var userQuota = {};
+        userQuota.actualQuotaValue = 1; // 1 because this was the first request
+        userQuota.actualMinute = actualMinute;
+        userQuota.quotaLimit = apikeyUserInfo.quota;
+        cacheForQuota.put(apikeyUserInfo.application, userQuota);
+    } else {
+        console.log('Updating the quota value...');
+        requestsInMinute = userQuota.actualQuotaValue;
+        requestsInMinute++;
+        userQuota.actualQuotaValue = requestsInMinute;
+        console.log('New value for cache: ' + JSON.stringify(userQuota));
+        cacheForQuota.put(apikeyUserInfo.application, userQuota);
+    }
+    
+    console.log("actualQuotaValue: " + JSON.stringify(cacheForQuota.get(apikeyUserInfo.application)));
+
+    //Verifying the quota
+    if(actualMinute === userQuota.actualMinute && requestsInMinute > userQuota.quotaLimit){
+        return false;
+    } else if (actualMinute > userQuota.actualMinute || (actualMinute === 0 && userQuota.actualMinute !== 0)) {
+        userQuota.actualQuotaValue = 0;
+        userQuota.actualMinute = actualMinute;
+    }
+
     return true;
 };
 
