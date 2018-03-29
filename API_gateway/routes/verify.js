@@ -71,7 +71,7 @@ exports.verifyApiUser = function (req, res, next) {
     }
 };
 
-exports.verifyQuota = function (cacheForQuota, apikeyUserInfo) {
+var verifyQuota = function (cacheForQuota, apikeyUserInfo, callback) {
     console.log("Quota verification...");
     var actualQuotaValue = cacheForQuota.get(apikeyUserInfo.application);
     console.log(actualQuotaValue);
@@ -101,24 +101,26 @@ exports.verifyQuota = function (cacheForQuota, apikeyUserInfo) {
 
     //Verifying the quota
     if(actualMinute === userQuota.actualMinute && requestsInMinute > userQuota.quotaLimit){
-        return false;
+        callback.failure('Requested quota exceeded by the application!');
     } else if (actualMinute > userQuota.actualMinute || (actualMinute === 0 && userQuota.actualMinute !== 0)) {
-        userQuota.actualQuotaValue = 0;
+        userQuota.actualQuotaValue = 1;
         userQuota.actualMinute = actualMinute;
+        callback.success();
+    } else {
+        callback.success();
     }
-
-    return true;
 };
 
-exports.verifyAllowance = function (req, feature) {
+exports.verifyAllowance = function (req, feature, cacheForQuota, apikeyUserInfo, callback) {
     console.log("Feature " + feature + " allowance verification...");
     console.log(req.apiKeyUserData[feature]);
     if (req.apiKeyUserData[feature]){
-        console.log("Feature allowed!");
-        return true;
+        console.log("Feature allowed! Verifying quota...");
+        verifyQuota(cacheForQuota, apikeyUserInfo, callback);
+        // no need to call anything from callback - can't return success right now
     } else {
         console.log("Feature not allowed!!!");
-        return false;
+        callback.failure('Feature is not allowed for this API key');
     }
 };
 
