@@ -336,4 +336,53 @@ operationsRouter.route('/anotherdata/:dataId')
     Verify.verifyAllowance(req, "feat2", cacheForQuota, req.apiKeyUserData, callback);
 })
 
+operationsRouter.route('/combinedata/')
+.all(Verify.verifyApiUser) // will create useJwtToken in req
+.get(function (req, res, next) {
+
+    var callback = {
+        success : function(){
+            //Update statistics
+            stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat3", "GET", true);
+    
+            console.log("GET operation permitted for API user");
+
+            var options1 = {
+                url: 'http://localhost:3000/data',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'api-gw-identifyer-token': req.useJwtToken
+                }
+            };
+
+            var options2 = {
+                url: 'http://localhost:3001/anotherdata',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'api-gw-identifyer-token': req.useJwtToken
+                }
+            };
+
+            var data = [];
+
+            var returnResult = {
+                returnCollectedData : function (data){
+                    var cumulativeObject = Object.assign(data[0], data[1]);
+                    JSON.parse(cumulativeObject);
+                }
+            }
+
+            restClient.queryExternalEndpoints(options1, options2, res, next, data, returnResult);
+        },
+        failure : function(errorText){
+            //Update statistics
+            stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat3", "GET", false);
+            var err = new Error(errorText);
+                err.status = 404;
+                return next(err);
+        }
+    }    
+    Verify.verifyAllowance(req, "feat3", cacheForQuota, req.apiKeyUserData, callback);
+})
+
 module.exports = operationsRouter;
