@@ -93,11 +93,11 @@ var verifyQuota = function (cacheForQuota, apikeyUserInfo, callback) {
         requestsInMinute = userQuota.actualQuotaValue;
         requestsInMinute++;
         userQuota.actualQuotaValue = requestsInMinute;
-        console.log('New value for cache: ' + JSON.stringify(userQuota));
+        //console.log('New value for cache: ' + JSON.stringify(userQuota));
         cacheForQuota.put(apikeyUserInfo.application, userQuota);
     }
     
-    console.log("actualQuotaValue: " + JSON.stringify(cacheForQuota.get(apikeyUserInfo.application)));
+    //console.log("actualQuotaValue: " + JSON.stringify(cacheForQuota.get(apikeyUserInfo.application)));
 
     //Verifying the quota
     if(actualMinute === userQuota.actualMinute && requestsInMinute > userQuota.quotaLimit){
