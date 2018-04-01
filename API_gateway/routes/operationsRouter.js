@@ -345,7 +345,7 @@ operationsRouter.route('/combinedata/')
             //Update statistics
             stats.updateStats(req.apiKeyUserData.ownedBy, req.apiKeyUserData.application, "feat3", "GET", true);
     
-            console.log("GET operation permitted for API user");
+            console.log("combined GET operation permitted for API user");
 
             var options1 = {
                 url: 'http://localhost:3000/data',
