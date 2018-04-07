@@ -17,11 +17,14 @@ angular.module('apiKeyGenerator')
             if(typeof response[0].username !== 'undefined' && response[0].username.length>0){
                 $scope.username = " " + response[0].username;
             } else {
-                
             }
         },
         function (response){
             $scope.message = "Get username error: " + response.status + " " + response.statusText;
+            /*alert(response.data.message);
+                if (response.data.message === 'You are not authenticated!'){
+                    $state.go('app');
+            }*/
         }
     );
 
@@ -39,6 +42,10 @@ angular.module('apiKeyGenerator')
         },
         function (response){
             $scope.message = "Get username error: " + response.status + " " + response.statusText;
+            alert(response.data.message);
+            if (response.data.message === 'You are not authenticated!'){
+                $state.go('app');
+            }
         }
     );
 
@@ -60,6 +67,10 @@ angular.module('apiKeyGenerator')
                             },
                             function (response) {
                                 $scope.message = "Error: " + response.status + " " + response.statusText;
+                                alert(response.data.message);
+                                if (response.data.message === 'You are not authenticated!'){
+                                    $state.go('app');
+                                }
                                 ngDialog.close();
                             });
     };
@@ -115,9 +126,11 @@ angular.module('apiKeyGenerator')
                                         
                             },
                             function (response) {
-                                console.log(response);
                                 $scope.message = "Error: " + response.status + " " + response.statusText;
                                 alert(response.data.message);
+                                if (response.data.message === 'You are not authenticated!'){
+                                    $state.go('app');
+                                }
                                 //ngDialog.close();
                                 //$scope.showLoading = false;
                             });
@@ -172,16 +185,13 @@ angular.module('apiKeyGenerator')
     $scope.loginData = $localStorage.getObject('userinfo','{}');
     
     $scope.doLogin = function() {
-        console.log("EntrypageController.doLogin()...");
         if($scope.rememberMe)
            $localStorage.storeObject('userinfo',$scope.loginData);
 
         AuthFactory.login($scope.loginData, function(){
-            console.log("EntrypageController... AuthFactory.login()");
             if ($scope.loggedIn){
-                console.log("going to home page...");
-            $state.go('home');
-        }
+                $state.go('home');
+            }
         });
 
     };
@@ -206,11 +216,14 @@ angular.module('apiKeyGenerator')
             if(typeof response[0].username !== 'undefined' && response[0].username.length>0){
                 $scope.username = " " + response[0].username;
             } else {
-                
+                alert(response.data.message);
             }
         },
         function (response){
             $scope.message = "Get username error: " + response.status + " " + response.statusText;
+            /*if (response.data.message === 'You are not authenticated!'){
+                $state.go('app');
+            }*/
         }
     );
     $scope.server1Data = [];
@@ -222,6 +235,10 @@ angular.module('apiKeyGenerator')
         },
         function (response){
             $scope.message = "Get error: " + response.status + " " + response.statusText;
+            alert(response.data.message);
+            if (response.data.message === 'You are not authenticated!'){
+                $state.go('app');
+            }
         }
     );
 
@@ -256,9 +273,11 @@ angular.module('apiKeyGenerator')
                                 $state.go($state.current, {}, {reload: true});             
                             },
                             function (response) {
-                                console.log(response);
                                 $scope.message = "Error: " + response.status + " " + response.statusText;
                                 alert(response.data.message);
+                                if (response.data.message === 'You are not authenticated!'){
+                                    $state.go('app');
+                                }
                             });
     }
 
@@ -273,6 +292,10 @@ angular.module('apiKeyGenerator')
                             },
                             function (response) {
                                 $scope.message = "Error: " + response.status + " " + response.statusText;
+                                alert(response.data.message);
+                                if (response.data.message === 'You are not authenticated!'){
+                                    $state.go('app');
+                                }
                                 ngDialog.close();
                             });
     };
@@ -305,6 +328,10 @@ angular.module('apiKeyGenerator')
             },
             function (response) {
                 $scope.message = "Error: " + response.status + " " + response.statusText;
+                alert(response.data.message);
+                if (response.data.message === 'You are not authenticated!'){
+                    $state.go('app');
+                }
                 ngDialog.close();
             });
     }
@@ -331,11 +358,14 @@ angular.module('apiKeyGenerator')
             if(typeof response[0].username !== 'undefined' && response[0].username.length>0){
                 $scope.username = " " + response[0].username;
             } else {
-                
             }
         },
         function (response){
             $scope.message = "Get username error: " + response.status + " " + response.statusText;
+            /*alert(response.data.message);
+            if (response.data.message === 'You are not authenticated!'){
+                $state.go('app');
+            }*/
         }
     );
     $scope.server2Data = [];
@@ -347,6 +377,10 @@ angular.module('apiKeyGenerator')
         },
         function (response){
             $scope.message = "Get error: " + response.status + " " + response.statusText;
+            alert(response.data.message);
+            if (response.data.message === 'You are not authenticated!'){
+                $state.go('app');
+            }
         }
     );
 
@@ -381,9 +415,11 @@ angular.module('apiKeyGenerator')
                                 $state.go($state.current, {}, {reload: true});             
                             },
                             function (response) {
-                                console.log(response);
                                 $scope.message = "Error: " + response.status + " " + response.statusText;
                                 alert(response.data.message);
+                                if (response.data.message === 'You are not authenticated!'){
+                                    $state.go('app');
+                                }
                             });
     }
 
@@ -398,6 +434,10 @@ angular.module('apiKeyGenerator')
                             },
                             function (response) {
                                 $scope.message = "Error: " + response.status + " " + response.statusText;
+                                alert(response.data.message);
+                                if (response.data.message === 'You are not authenticated!'){
+                                    $state.go('app');
+                                }
                                 ngDialog.close();
                             });
     };
@@ -430,6 +470,10 @@ angular.module('apiKeyGenerator')
             },
             function (response) {
                 $scope.message = "Error: " + response.status + " " + response.statusText;
+                alert(response.data.message);
+                if (response.data.message === 'You are not authenticated!'){
+                    $state.go('app');
+                }
                 ngDialog.close();
             });
     }
@@ -477,6 +521,11 @@ angular.module('apiKeyGenerator')
 
 .directive('redirectToHome', [ '$state', function($state) {
     $state.go('home');
+    return {
+    };
+}])
+.directive('redirectToLogin', [ '$state', function($state) {
+    $state.go('app');
     return {
     };
 }])

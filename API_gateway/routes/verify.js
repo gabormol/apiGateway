@@ -13,7 +13,7 @@ exports.getToken = function (user, isAPIkey) {
         });
     } else {
         return jwt.sign(user, config.secretKey, {
-            expiresIn: 120000
+            expiresIn: 120
         });
     }
 };
