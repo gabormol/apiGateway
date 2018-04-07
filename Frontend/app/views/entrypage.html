@@ -1,0 +1,33 @@
+
+    <div class="row row-content">
+        <div class="col-xs-12 col col-sm-8 col-sm-offset-2">
+            <h1>API key generator login page </h1>
+            <h1>(Demo)</h1>
+        </div>
+        
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+            <div class="col-xs-12 col-sm-4 col-sm-offset-3">
+                <form ng-if="!loggedIn" ng-submit="doLogin()">
+                    <div class="form-group">
+                        
+                            <label class="sr-only" for="username">Username</label>
+                            <input type="text" class="form-control input-sm" id="username" placeholder="Username" ng-model="loginData.username">
+                        
+                    </div>
+                    <div class="form-group">
+                      
+                            <label class="sr-only" for="password">Password</label>
+                            <input type="password" class="form-control input-sm" id="password" placeholder="Password" ng-model="loginData.password">
+                       
+                    </div>
+                    <button type="submit" class="btn btn-info btn-sm">Sign in</button>
+                    <a id="register" ng-click=openRegister()>Register new user</a>
+                </form>
+                <div ng-if="loggedIn">
+                    <div redirect-to-home></div>
+                </div>
+            </div>
+        </div>
+   
+    </div>
+

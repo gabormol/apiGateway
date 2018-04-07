@@ -129,8 +129,8 @@ angular.module('apiKeyGenerator')
 
 }])
 
-//home.html
-.controller('HomeController', ['$scope', '$state', '$rootScope', 'ngDialog', '$localStorage', 'AuthFactory', function ($scope, $state, $rootScope, ngDialog, $localStorage, AuthFactory) {
+//entrypage.html
+.controller('EntrypageController', ['$scope', '$state', '$rootScope', 'ngDialog', '$localStorage', 'AuthFactory', function ($scope, $state, $rootScope, ngDialog, $localStorage, AuthFactory) {
 
     $scope.loggedIn = false;
     $scope.username = '';
@@ -172,12 +172,15 @@ angular.module('apiKeyGenerator')
     $scope.loginData = $localStorage.getObject('userinfo','{}');
     
     $scope.doLogin = function() {
+        console.log("EntrypageController.doLogin()...");
         if($scope.rememberMe)
            $localStorage.storeObject('userinfo',$scope.loginData);
 
         AuthFactory.login($scope.loginData, function(){
+            console.log("EntrypageController... AuthFactory.login()");
             if ($scope.loggedIn){
-            $state.go('app.actions');
+                console.log("going to home page...");
+            $state.go('home');
         }
         });
 
@@ -187,6 +190,34 @@ angular.module('apiKeyGenerator')
         ngDialog.open({ template: 'views/register.html', scope: $scope, className: 'ngdialog-theme-default', controller:"RegisterController" });
     };
     
+}])
+
+//home.html
+.controller('HomeController', ['$scope', '$state', '$rootScope', 'ngDialog', '$localStorage', 'AuthFactory', function ($scope, $state, $rootScope, ngDialog, $localStorage, AuthFactory) {
+    console.log("HomeController...");
+}])
+
+//server1.html
+.controller('Server1Controller', ['$scope', '$state', '$rootScope', 'ngDialog', '$localStorage', 'AuthFactory', function ($scope, $state, $rootScope, ngDialog, $localStorage, AuthFactory) {
+    console.log("Server1Controller...");
+}])
+
+//header.html
+.controller('HeaderController', ['$scope', '$state', '$rootScope', 'ngDialog', '$localStorage', 'AuthFactory', function ($scope, $state, $rootScope, ngDialog, $localStorage, AuthFactory) {
+    console.log("HeaderController...");
+    $scope.loggedIn = AuthFactory.isAuthenticated;
+
+    $scope.logOut = function() {
+        AuthFactory.logout();
+         $scope.loggedIn = false;
+         $scope.username = '';
+         $state.go('app'); // back to home
+     };
+}])
+
+//server2.html
+.controller('Server2Controller', ['$scope', '$state', '$rootScope', 'ngDialog', '$localStorage', 'AuthFactory', function ($scope, $state, $rootScope, ngDialog, $localStorage, AuthFactory) {
+    console.log("Server2Controller...");
 }])
 
 .controller('LoginController', ['$scope', '$state', 'ngDialog', '$localStorage', 'AuthFactory', function ($scope, $state, ngDialog, $localStorage, AuthFactory) {
@@ -199,7 +230,7 @@ angular.module('apiKeyGenerator')
 
         AuthFactory.login($scope.loginData);
 
-        $state.go('app.actions');
+        $state.go('home');
 
     };
             
@@ -209,6 +240,8 @@ angular.module('apiKeyGenerator')
     
 }])
 
+
+// register.html
 .controller('RegisterController', ['$scope', 'ngDialog', '$localStorage', 'AuthFactory', '$state', function ($scope, ngDialog, $localStorage, AuthFactory, $state) {
     
     $scope.register={};
@@ -218,7 +251,7 @@ angular.module('apiKeyGenerator')
 
         AuthFactory.register($scope.registration, function(){
             if ($scope.loggedIn){
-            $state.go('app.actions');
+            $state.go('home');
         }
         });
         
@@ -227,8 +260,8 @@ angular.module('apiKeyGenerator')
     };
 }])
 
-.directive('redirectToactions', [ '$state', function($state) {
-    $state.go('app.actions');
+.directive('redirectToHome', [ '$state', function($state) {
+    $state.go('home');
     return {
     };
 }])
