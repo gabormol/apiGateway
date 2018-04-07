@@ -1,3 +1,60 @@
 <div class="container">
-Server 1 page
+    <div class="col-xs-12">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a ui-sref="home">API key Demo</a></li>
+            <li class="breadcrumb-item active">Server 1</li>
+        </ul>
+    </div>
+    <div class="col-xs-12">
+        <h1>Data of user {{username}} on Server 1</h1>
+            &nbsp;
+    </div>
+    <div class="col-xs-12">
+            <!-- <div class="loader" ng-show="!showApiKeys"></div> -->
+            <table id="server1data">
+                <tr align="center">
+                    <th width="200">
+                        <h5 align="center">numberData</h5>
+                        
+                    </th>
+                    <th width="200">
+                        <h5 align="center">stringData</h5>
+                       
+                    </th>
+                    <th width="200">
+                        <h5 align="center">booleanData</h5>
+                        
+                    </th>
+                </tr>
+                <tr ng-repeat="document in server1Data">
+                    <td  class="datacell" align="center">
+                        {{document.numberData}}
+                        
+                    </td>
+                    <td  class="datacell" align="center">
+                        {{document.stringData}}
+                        
+                    </td>
+                    <td  class="datacell" align="center">
+                        {{document.booleanData}}
+                        
+                    </td> 
+                    <td>
+                        <button id="btnRemove" class="btn btn-sm" ng-click="deleteDocument(document._id)">Delete</button>
+                    </td>
+                    <td>
+                        <button id="btnEdit" class="btn btn-sm" ng-click="modifyDocument(document.numberData, document.stringData, document.booleanData, document._id)">Modify</button>
+                    </td>
+                    
+                </tr>
+                
+            </table> 
+    </div>
+
+    <div class="col-xs-6">
+            <p style="padding:10px;"></p>
+             <button id="btnAdd" class="btn btn-sm" ng-click=addNewDocument()>Add new data</button>
+    </div>
+    <div class="col-xs-6">   
+    </div>
 </div>

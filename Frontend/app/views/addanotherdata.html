@@ -1,0 +1,29 @@
+<div class="ngdialog-message">
+        <div class="">
+            <h3>Add new another data</h3>
+        </div>
+         
+        <div class="">&nbsp;</div>
+        
+        <div class="">
+            <form name="newDataForm" ng-submit="addNewDataDocument()">
+                <div class="form-group">
+                    <label for="appname">numberData</label>
+                    <input type="number" class="form-control input-sm" id="numberdata" ng-model="anotherNumberData" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">stringData</label>
+                    <input type="text" class="form-control input-sm" id="stringdata" ng-model="anotherStringData" required>
+                </div>   
+                <div class="form-group">
+                    <label for="feature1">booleanData</label>
+                        <select class="form-control" id="anotherbooleandata" ng-model="anotherBooleanDataOptions.selectedOption" 
+                            ng-options="option.label for option in anotherBooleanDataOptions.availableOptions track by option.value">
+                        </select>
+                </div>
+                                
+                <button type="submit" ng-disabled="newDataForm.$invalid" class="btn btn-info btn-sm">Add</button>
+                <button type="button" class="btn btn-default btn-sm" ng-click=cancelNgDialogue()>Cancel</button>
+            </form>
+        </div>
+    </div>

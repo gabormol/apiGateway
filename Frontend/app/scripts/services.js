@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('apiKeyGenerator')
-.constant("baseURL", "http://localhost:5000/")
+.constant("baseURLgw", "http://localhost:5000/")
+.constant("baseURLs1", "http://localhost:3000/")
+.constant("baseURLs2", "http://localhost:3001/")
 
 .factory('$localStorage', ['$window', function ($window) {
     return {
@@ -23,7 +25,7 @@ angular.module('apiKeyGenerator')
     };
 }])
 
-.factory('AuthFactory', ['$resource', '$http', '$localStorage', '$rootScope', '$window', 'baseURL', 'ngDialog', function($resource, $http, $localStorage, $rootScope, $window, baseURL, ngDialog){
+.factory('AuthFactory', ['$resource', '$http', '$localStorage', '$rootScope', '$window', 'baseURLgw', 'ngDialog', function($resource, $http, $localStorage, $rootScope, $window, baseURLgw, ngDialog){
     
     var authFac = {};
     var TOKEN_KEY = 'Token';
@@ -63,7 +65,7 @@ angular.module('apiKeyGenerator')
      
     authFac.login = function(loginData, callback) {
         
-        $resource(baseURL + "users/login")
+        $resource(baseURLgw + "users/login")
         .save(loginData,
            function(response) {
               storeUserCredentials({username:loginData.username, token: response.token});
@@ -90,14 +92,14 @@ angular.module('apiKeyGenerator')
     };
     
     authFac.logout = function() {
-        $resource(baseURL + "users/logout").get(function(response){
+        $resource(baseURLgw + "users/logout").get(function(response){
         });
         destroyUserCredentials();
     };
     
     authFac.register = function(registerData, callback) {
         
-        $resource(baseURL + "users/register")
+        $resource(baseURLgw + "users/register")
         .save(registerData,
            function(response) {
               authFac.login({username:registerData.username, password:registerData.password}, callback);
@@ -124,7 +126,7 @@ angular.module('apiKeyGenerator')
     };
     
     authFac.myData = function(){
-        return $resource(baseURL + "users/mydata", null, {
+        return $resource(baseURLgw + "users/mydata", null, {
                 
             });
     };
@@ -144,11 +146,27 @@ angular.module('apiKeyGenerator')
     
 }])
 
-.factory('apikeyUserFactory', ['$resource', 'baseURL', function ($resource, baseURL) { 
-        return $resource(baseURL + "apikeyusers/:id", null, {
+.factory('apikeyUserFactory', ['$resource', 'baseURLgw', function ($resource, baseURLgw) { 
+        return $resource(baseURLgw + "apikeyusers/:id", null, {
             'update': {
                 method: 'PUT'
             }
         });
+}])
+
+.factory('server1DataFactory', ['$resource', 'baseURLs1', function ($resource, baseURLs1) { 
+    return $resource(baseURLs1 + "data/:id", null, {
+        'update': {
+            method: 'PUT'
+        }
+    });
+}])
+
+.factory('server2DataFactory', ['$resource', 'baseURLs2', function ($resource, baseURLs2) { 
+    return $resource(baseURLs2 + "anotherdata/:id", null, {
+        'update': {
+            method: 'PUT'
+        }
+    });
 }]);
 

@@ -1,0 +1,29 @@
+<div class="ngdialog-message">
+        <div class="">
+            <h3>Modifying document in Server 2</h3>
+        </div>
+         
+        <div class="">&nbsp;</div>
+        
+        <div class="">
+            <form name="modifyDataForm" ng-submit="modifyAnotherDocumentInDb()">
+                <div class="form-group">
+                    <label for="anothernumberdata">anotherNumberData</label>
+                    <input type="number" class="form-control input-sm" id="anothernumberdata" ng-model="anotherNumberData" required>
+                </div>
+                <div class="form-group">
+                    <label for="anotherstringdata">anotherStringData</label>
+                    <input type="text" class="form-control input-sm" id="anotherstringdata" ng-model="anotherStringData" required>
+                </div>   
+                <div class="form-group">
+                    <label for="anotherbooleandata">anotherBooleanData</label>
+                        <select class="form-control" id="anotherbooleandata" ng-model="anotherBooleanDataOptions.selectedOption" 
+                            ng-options="option.label for option in anotherBooleanDataOptions.availableOptions track by option.value">
+                        </select>
+                </div>
+                                
+                <button type="submit" ng-disabled="modifyDataForm.$invalid" class="btn btn-info btn-sm">Modify</button>
+                <button type="button" class="btn btn-default btn-sm" ng-click=cancelNgDialogue()>Cancel</button>
+            </form>
+        </div>
+    </div>

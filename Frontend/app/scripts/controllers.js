@@ -194,17 +194,124 @@ angular.module('apiKeyGenerator')
 
 //home.html
 .controller('HomeController', ['$scope', '$state', '$rootScope', 'ngDialog', '$localStorage', 'AuthFactory', function ($scope, $state, $rootScope, ngDialog, $localStorage, AuthFactory) {
-    console.log("HomeController...");
+    
 }])
 
 //server1.html
-.controller('Server1Controller', ['$scope', '$state', '$rootScope', 'ngDialog', '$localStorage', 'AuthFactory', function ($scope, $state, $rootScope, ngDialog, $localStorage, AuthFactory) {
-    console.log("Server1Controller...");
+.controller('Server1Controller', ['$scope', '$state', '$rootScope', 'ngDialog', '$localStorage', 'server1DataFactory', 'AuthFactory', function ($scope, $state, $rootScope, ngDialog, $localStorage, server1DataFactory, AuthFactory) {
+    $scope.username = "";
+
+    AuthFactory.myData().query(
+        function (response){
+            if(typeof response[0].username !== 'undefined' && response[0].username.length>0){
+                $scope.username = " " + response[0].username;
+            } else {
+                
+            }
+        },
+        function (response){
+            $scope.message = "Get username error: " + response.status + " " + response.statusText;
+        }
+    );
+    $scope.server1Data = [];
+    var server1Data = server1DataFactory.query(
+        function (response){
+            for (var i = 0; i < response.length; i++) {
+                $scope.server1Data.push(response[i]);
+            } 
+        },
+        function (response){
+            $scope.message = "Get error: " + response.status + " " + response.statusText;
+        }
+    );
+
+    $scope.addNewDocument = function() {
+        
+        ngDialog.open({ template: 'views/adddata.html', scope: $scope, className: 'ngdialog-theme-default', controller:"Server1Controller" });
+
+    };
+
+    $scope.numberData;
+    $scope.stringData;
+    $scope.booleanDataOptions = {
+        selectedOption: {value: 'false', label: 'FALSE'},
+        availableOptions: [
+            {value: 'false', label: 'FALSE'},
+            {value: 'true', label: 'TRUE'}
+        ]
+    };
+
+    $scope.addNewDataDocument = function(){
+
+        var newDataDocument = {
+            numberData : $scope.numberData,
+            stringData : $scope.stringData,
+            booleanData : $scope.booleanDataOptions.selectedOption.value 
+            
+        }
+
+        server1DataFactory.save( newDataDocument ).$promise.then(
+                            function (response) {
+                                ngDialog.close();
+                                $state.go($state.current, {}, {reload: true});             
+                            },
+                            function (response) {
+                                console.log(response);
+                                $scope.message = "Error: " + response.status + " " + response.statusText;
+                                alert(response.data.message);
+                            });
+    }
+
+    $scope.deleteDocument = function(documentId) {
+
+        $scope.documentId = documentId;
+
+        server1DataFactory.delete({id: documentId}).$promise.then(
+                            function (response) {
+                                ngDialog.close();
+                                $state.go($state.current, {}, {reload: true});           
+                            },
+                            function (response) {
+                                $scope.message = "Error: " + response.status + " " + response.statusText;
+                                ngDialog.close();
+                            });
+    };
+
+    $scope.cancelNgDialogue = function(){
+        ngDialog.close();
+    }
+
+    $scope.modifyDocument = function(numberData, stringData, booleanData, _id){
+        $scope.numberData = numberData;
+        $scope.stringData = stringData;
+        $scope.booleanDataOptions.selectedOption.value = booleanData;
+        $scope.idToModify = _id;
+        
+        ngDialog.open({ template: 'views/modifydata.html', scope: $scope, className: 'ngdialog-theme-default', controller:"Server1Controller" });
+    
+    }
+
+    $scope.modifyDocumentInDb = function(){
+        var modifiedDataDocument = {
+            numberData : $scope.numberData,
+            stringData : $scope.stringData,
+            booleanData : $scope.booleanDataOptions.selectedOption.value     
+        }
+
+        server1DataFactory.update({id: $scope.idToModify}, modifiedDataDocument ).$promise.then(
+            function (response) {
+                ngDialog.close();
+                $state.go($state.current, {}, {reload: true});           
+            },
+            function (response) {
+                $scope.message = "Error: " + response.status + " " + response.statusText;
+                ngDialog.close();
+            });
+    }
 }])
 
 //header.html
 .controller('HeaderController', ['$scope', '$state', '$rootScope', 'ngDialog', '$localStorage', 'AuthFactory', function ($scope, $state, $rootScope, ngDialog, $localStorage, AuthFactory) {
-    console.log("HeaderController...");
     $scope.loggedIn = AuthFactory.isAuthenticated;
 
     $scope.logOut = function() {
@@ -216,8 +323,116 @@ angular.module('apiKeyGenerator')
 }])
 
 //server2.html
-.controller('Server2Controller', ['$scope', '$state', '$rootScope', 'ngDialog', '$localStorage', 'AuthFactory', function ($scope, $state, $rootScope, ngDialog, $localStorage, AuthFactory) {
-    console.log("Server2Controller...");
+.controller('Server2Controller', ['$scope', '$state', '$rootScope', 'ngDialog', '$localStorage', 'server2DataFactory', 'AuthFactory', function ($scope, $state, $rootScope, ngDialog, $localStorage, server2DataFactory, AuthFactory) {
+    $scope.username = "";
+
+    AuthFactory.myData().query(
+        function (response){
+            if(typeof response[0].username !== 'undefined' && response[0].username.length>0){
+                $scope.username = " " + response[0].username;
+            } else {
+                
+            }
+        },
+        function (response){
+            $scope.message = "Get username error: " + response.status + " " + response.statusText;
+        }
+    );
+    $scope.server2Data = [];
+    var server2Data = server2DataFactory.query(
+        function (response){
+            for (var i = 0; i < response.length; i++) {
+                $scope.server2Data.push(response[i]);
+            } 
+        },
+        function (response){
+            $scope.message = "Get error: " + response.status + " " + response.statusText;
+        }
+    );
+
+    $scope.addNewDocument = function() {
+        
+        ngDialog.open({ template: 'views/addanotherdata.html', scope: $scope, className: 'ngdialog-theme-default', controller:"Server2Controller" });
+
+    };
+
+    $scope.anotherNumberData;
+    $scope.anotherStringData;
+    $scope.anotherBooleanDataOptions = {
+        selectedOption: {value: 'false', label: 'FALSE'},
+        availableOptions: [
+            {value: 'false', label: 'FALSE'},
+            {value: 'true', label: 'TRUE'}
+        ]
+    };
+
+    $scope.addNewDataDocument = function(){
+
+        var newAnotherDataDocument = {
+            anotherNumberData : $scope.anotherNumberData,
+            anotherStringData : $scope.anotherStringData,
+            anotherBooleanData : $scope.anotherBooleanDataOptions.selectedOption.value 
+            
+        }
+
+        server2DataFactory.save( newAnotherDataDocument ).$promise.then(
+                            function (response) {
+                                ngDialog.close();
+                                $state.go($state.current, {}, {reload: true});             
+                            },
+                            function (response) {
+                                console.log(response);
+                                $scope.message = "Error: " + response.status + " " + response.statusText;
+                                alert(response.data.message);
+                            });
+    }
+
+    $scope.deleteDocument = function(documentId) {
+
+        $scope.documentId = documentId;
+
+        server2DataFactory.delete({id: documentId}).$promise.then(
+                            function (response) {
+                                ngDialog.close();
+                                $state.go($state.current, {}, {reload: true});           
+                            },
+                            function (response) {
+                                $scope.message = "Error: " + response.status + " " + response.statusText;
+                                ngDialog.close();
+                            });
+    };
+
+    $scope.cancelNgDialogue = function(){
+        ngDialog.close();
+    }
+
+    $scope.modifyAnotherDocument = function(numberData, stringData, booleanData, _id){
+        $scope.anotherNumberData = numberData;
+        $scope.anotherStringData = stringData;
+        $scope.anotherBooleanDataOptions.selectedOption.value = booleanData;
+        $scope.idToModify = _id;
+        
+        ngDialog.open({ template: 'views/modifyanotherdata.html', scope: $scope, className: 'ngdialog-theme-default', controller:"Server2Controller" });
+    
+    }
+
+    $scope.modifyAnotherDocumentInDb = function(){
+        var modifiedDataDocument = {
+            anotherNumberData : $scope.anotherNumberData,
+            anotherStringData : $scope.anotherStringData,
+            anotherBooleanData : $scope.anotherBooleanDataOptions.selectedOption.value     
+        }
+
+        server2DataFactory.update({id: $scope.idToModify}, modifiedDataDocument ).$promise.then(
+            function (response) {
+                ngDialog.close();
+                $state.go($state.current, {}, {reload: true});           
+            },
+            function (response) {
+                $scope.message = "Error: " + response.status + " " + response.statusText;
+                ngDialog.close();
+            });
+    }
 }])
 
 .controller('LoginController', ['$scope', '$state', 'ngDialog', '$localStorage', 'AuthFactory', function ($scope, $state, ngDialog, $localStorage, AuthFactory) {
