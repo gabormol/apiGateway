@@ -4,6 +4,7 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var cookieSession = require('cookie-session');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var passport = require('passport');
@@ -60,6 +61,12 @@ app.use(express.static(path.join(__dirname, 'client')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(cookieSession({
+  name: 'session',
+  keys: ['SECRECT KEY'],
+  maxAge: 24 * 60 * 60 * 1000
+}));
 app.use(cookieParser());
 
 // passport config

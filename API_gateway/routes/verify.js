@@ -3,6 +3,8 @@ var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('../config.js');
 var Apikeyuser = require('../models/apikeyuser');
 
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+
 var Utils = require('./utils.js');
 
 exports.getToken = function (user, isAPIkey) {
@@ -72,9 +74,7 @@ exports.verifyApiUser = function (req, res, next) {
 };
 
 var verifyQuota = function (cacheForQuota, apikeyUserInfo, callback) {
-    console.log("Quota verification...");
     var actualQuotaValue = cacheForQuota.get(apikeyUserInfo.application);
-    console.log(actualQuotaValue);
     var date = new Date();
     var actualMinute = date.getMinutes();
     var requestsInMinute; 
@@ -82,22 +82,18 @@ var verifyQuota = function (cacheForQuota, apikeyUserInfo, callback) {
     var userQuota = cacheForQuota.get(apikeyUserInfo.application);
 
     if (userQuota === undefined || userQuota === null) {
-        console.log('Creating new quota object');
         var userQuota = {};
         userQuota.actualQuotaValue = 1; // 1 because this was the first request
         userQuota.actualMinute = actualMinute;
         userQuota.quotaLimit = apikeyUserInfo.quota;
         cacheForQuota.put(apikeyUserInfo.application, userQuota);
     } else {
-        console.log('Updating the quota value...');
         requestsInMinute = userQuota.actualQuotaValue;
         requestsInMinute++;
         userQuota.actualQuotaValue = requestsInMinute;
-        //console.log('New value for cache: ' + JSON.stringify(userQuota));
         cacheForQuota.put(apikeyUserInfo.application, userQuota);
     }
     
-    //console.log("actualQuotaValue: " + JSON.stringify(cacheForQuota.get(apikeyUserInfo.application)));
 
     //Verifying the quota
     if(actualMinute === userQuota.actualMinute && requestsInMinute > userQuota.quotaLimit){
