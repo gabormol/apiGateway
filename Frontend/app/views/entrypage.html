@@ -6,7 +6,7 @@
         </div>
         
         <div class="col-xs-12 col-sm-8 col-sm-offset-2">
-            <div class="col-xs-12 col-sm-4 col-sm-offset-3">
+            <div class="col-xs-12 col-sm-5 col-sm-offset-3">
                 <form ng-submit="doLogin()">
                     <div class="form-group">
                         
@@ -22,7 +22,12 @@
                     </div>
                     <button type="submit" class="btn btn-info btn-sm">Sign in</button>
                     <a id="register" ng-click=openRegister()>Register new user</a>
+                    <!--<a class="btn btn-social-icon btn-google" href="http://google.com/+"><i class="fa fa-google">Sign in with Google</i></a>-->
                 </form>
+            </div>
+            <div class="col-xs-12 col-sm-5 col-sm-offset-3">
+                <br>
+                <button  class="btn btn-google" ng-click=loginWithGoogle()> Sign in with Google</button>
             </div>
         </div>
    

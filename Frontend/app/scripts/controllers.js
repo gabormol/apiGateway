@@ -143,7 +143,7 @@ angular.module('apiKeyGenerator')
 }])
 
 //entrypage.html
-.controller('EntrypageController', ['$scope', '$state', '$rootScope', 'ngDialog', '$localStorage', 'AuthFactory', function ($scope, $state, $rootScope, ngDialog, $localStorage, AuthFactory) {
+.controller('EntrypageController', ['$scope', '$state', '$rootScope', 'ngDialog', '$localStorage', 'AuthFactory', '$location', function ($scope, $state, $rootScope, ngDialog, $localStorage, AuthFactory, $location) {
 
     $scope.loggedIn = false;
     $scope.username = '';
@@ -199,6 +199,11 @@ angular.module('apiKeyGenerator')
     $scope.openRegister = function () {
         ngDialog.open({ template: 'views/register.html', scope: $scope, className: 'ngdialog-theme-default', controller:"RegisterController" });
     };
+
+    $scope.loginWithGoogle = function(){
+        console.log("Login with Google...");
+        $location.url('http://localhost:5000/auth/google');
+    }
     
 }])
 
