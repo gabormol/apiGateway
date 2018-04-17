@@ -200,10 +200,13 @@ angular.module('apiKeyGenerator')
         ngDialog.open({ template: 'views/register.html', scope: $scope, className: 'ngdialog-theme-default', controller:"RegisterController" });
     };
 
-    $scope.loginWithGoogle = function(){
-        console.log("Login with Google...");
-        $location.url('http://localhost:5000/auth/google');
-    }
+    $scope.$on('google:oauth2:signed-in', function (e,val) {
+        console.log('is signed in', val)
+    });
+
+    $rootScope.$on('google:oauth2:profile', function (e,profile) {
+        console.log('got profile', profile)
+    });
     
 }])
 

@@ -1,6 +1,9 @@
 'use strict';
 
-angular.module('apiKeyGenerator', ['ui.router','ngResource','ngDialog'])
+angular.module('apiKeyGenerator', ['ui.router','ngResource','ngDialog', 'googleOAuth2'])
+.config(function (gapiAuth2CredentialsProvider) {
+        gapiAuth2CredentialsProvider.client_id = '608790690704-ao0ta4n517tjsup84cfenoqje1gefb6r.apps.googleusercontent.com';
+})
 .config(function($stateProvider, $urlRouterProvider) {
         $stateProvider
             .state('app', {
