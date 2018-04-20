@@ -74,6 +74,10 @@ angular.module('apiKeyGenerator')
                                 ngDialog.close();
                             });
     };
+
+    $scope.cancelNgDialogue = function(){
+        ngDialog.close();
+    }
     
 }])
 
