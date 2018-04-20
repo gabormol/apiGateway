@@ -82,7 +82,7 @@ angular.module('apiKeyGenerator')
 }])
 
 //addapikey.html
-.controller('AddApiKeyController', ['$scope', 'ngDialog', '$state', 'apikeyUserFactory', function ($scope, ngDialog, $state, apikeyUserFactory) {
+.controller('AddApiKeyController', ['$scope', 'ngDialog', '$state', 'apikeyUserFactory', '$location', function ($scope, ngDialog, $state, apikeyUserFactory, $location) {
     $scope.appName = "your application's name";
     $scope.quota = 10;
     $scope.description = "some description..."
@@ -147,7 +147,8 @@ angular.module('apiKeyGenerator')
 }])
 
 //entrypage.html
-.controller('EntrypageController', ['$scope', '$state', '$rootScope', 'ngDialog', '$localStorage', 'AuthFactory', '$location', function ($scope, $state, $rootScope, ngDialog, $localStorage, AuthFactory, $location) {
+.controller('EntrypageController', ['$scope', '$state', '$rootScope', 'ngDialog', '$localStorage', 'AuthFactory', '$location', 'popupFactory', '$window',
+    function ($scope, $state, $rootScope, ngDialog, $localStorage, AuthFactory, $location, popupFactory, $window) {
 
     $scope.loggedIn = false;
     $scope.username = '';
@@ -211,6 +212,37 @@ angular.module('apiKeyGenerator')
     $rootScope.$on('google:oauth2:profile', function (e,profile) {
         console.log('got profile', profile)
     });
+
+    $scope.loginWithGoogle = function(){
+        console.log("Login with Google...");
+        var url =  'http://mydemodomain.com:5000/auth/google';
+
+        var width 	= width || 500, height 	= height || 500;
+
+		var windowOptions = windowOptions || 'width=500,height=500' + ',top=' + $window.screenY + (($window.outerHeight - height) / 2.5) + ',left=' + $window.screenX + (($window.outerWidth - width) / 2);
+
+        window.addEventListener('message', function(event) { 
+
+            // IMPORTANT: Check the origin of the data! 
+            if (~event.origin.indexOf('http://mydemodomain.com:5000')) { 
+                // The data has been sent from your site 
+
+                // The data sent with postMessage is stored in event.data 
+                //console.log("Event data: " + event.data); 
+
+                var receivedObject = JSON.parse(event.data);
+                console.log("Event data token: " + receivedObject.token); 
+                console.log("Event data user: " + receivedObject.username); 
+            } else { 
+                // The data hasn't been sent from your site! 
+                // Be careful! Do not use it. 
+                console.log("Event data2: " + event.data); 
+                return; 
+            } 
+        }); 
+
+        var popupWindow = window.open(url, '_blank', windowOptions)
+    }
     
 }])
 
