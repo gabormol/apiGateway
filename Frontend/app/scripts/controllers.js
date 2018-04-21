@@ -147,8 +147,8 @@ angular.module('apiKeyGenerator')
 }])
 
 //entrypage.html
-.controller('EntrypageController', ['$scope', '$state', '$rootScope', 'ngDialog', '$localStorage', 'AuthFactory', '$location', 'popupFactory', '$window',
-    function ($scope, $state, $rootScope, ngDialog, $localStorage, AuthFactory, $location, popupFactory, $window) {
+.controller('EntrypageController', ['$scope', '$state', '$rootScope', 'ngDialog', '$localStorage', 'AuthFactory', '$location', '$window',
+    function ($scope, $state, $rootScope, ngDialog, $localStorage, AuthFactory, $location, $window) {
 
     $scope.loggedIn = false;
     $scope.username = '';
@@ -227,16 +227,17 @@ angular.module('apiKeyGenerator')
             if (~event.origin.indexOf('http://mydemodomain.com:5000')) { 
                 // The data has been sent from your site 
 
-                // The data sent with postMessage is stored in event.data 
-                //console.log("Event data: " + event.data); 
-
                 var receivedObject = JSON.parse(event.data);
-                console.log("Event data token: " + receivedObject.token); 
-                console.log("Event data user: " + receivedObject.username); 
+                $localStorage.storeObject('Token', receivedObject);
+                AuthFactory.loginOAuth(receivedObject, function(){
+                    if ($scope.loggedIn){
+                        popupWindow.close();
+                        $state.go('home');
+                    }
+                });
             } else { 
                 // The data hasn't been sent from your site! 
                 // Be careful! Do not use it. 
-                console.log("Event data2: " + event.data); 
                 return; 
             } 
         }); 

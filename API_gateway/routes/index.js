@@ -29,10 +29,15 @@ router.get('/auth/google/callback', function(req,res,next){
           err: 'Could not log in user'
         });
       }
-        var token = Verify.getToken(user);
+        var userForToken = {
+          'isApiKey' : false,
+          'username' : user.username,
+          '_id': user._id
+        };
+        var token = Verify.getToken(userForToken);
         
         res.writeHead(200, {'Context-Type': 'javascript'});
-        var jsonToSend = "{\\\"token\\\" : \\\"" + token + "\\\", \\\"username\\\" : \\\"" + user.username + "\\\"}";
+        var jsonToSend = "{\\\"username\\\" : \\\"" + user.username + "\\\", \\\"token\\\" : \\\"" + token + "\\\"}";
         var scriptToReturn = '<script> window.opener.postMessage(\"' + jsonToSend + '\", \"http://mydemodomain.com:8887\" );</script>';
         //var scriptToReturn = '<script> window.opener.postMessage(\"{\'token\' : \'' + token 
         //  + '\', \'username\' : \'' + user.username + '\'} \", \"http://mydemodomain.com:8887\" );</script>';

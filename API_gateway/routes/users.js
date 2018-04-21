@@ -25,12 +25,6 @@ router.post('/register', function (req, res) {
             if (req.body.lastname) {
                 user.lastname = req.body.lastname;
             }
-            if (req.body.currencysymbol) {
-                user.currencySymbol = req.body.currencysymbol;
-            }
-            if (req.body.currencydecimals) {
-                user.currencyDecimals = req.body.currencydecimals;
-            }
             user.save(function (err, user) {
                 passport.authenticate('local')(req, res, function () {
                     return res.status(200).json({status: 'Registration Successful!'});
