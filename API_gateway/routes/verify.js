@@ -58,13 +58,15 @@ exports.verifyApiUser = function (req, res, next) {
                 console.log("Error: " + error);
                 next(err);
             } 
-            // Let's store the real JWT token to the API key provided
 
+            // not found is not an error, just a null is returned
             if( resultApiKeyEntry === null){
                 var err = new Error('Token is not valid!');
                 err.status = 403;
                 return next(err);
             }
+
+            // Let's store the real JWT token to the API key provided
             var correspondingJwtToken = resultApiKeyEntry.jwtToken;
             req.useJwtToken = correspondingJwtToken;
             console.log(resultApiKeyEntry);
