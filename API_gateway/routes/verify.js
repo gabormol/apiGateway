@@ -54,8 +54,17 @@ exports.verifyApiUser = function (req, res, next) {
     // decode token
     if (token) {
         Apikeyuser.findOne({'apiKeyToProvide' : { $eq: token}}, function (err, resultApiKeyEntry) {
-            if (err) next(err);
+            if (err){
+                console.log("Error: " + error);
+                next(err);
+            } 
             // Let's store the real JWT token to the API key provided
+
+            if( resultApiKeyEntry === null){
+                var err = new Error('Token is not valid!');
+                err.status = 403;
+                return next(err);
+            }
             var correspondingJwtToken = resultApiKeyEntry.jwtToken;
             req.useJwtToken = correspondingJwtToken;
             console.log(resultApiKeyEntry);
